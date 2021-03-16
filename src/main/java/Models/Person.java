@@ -1,3 +1,5 @@
+package Models;
+
 /**
  * Each generated Person has the following properties: personID, username, firstName, lastName, gender, fatherID, motherID, spouseID
  */

@@ -1,3 +1,6 @@
+package DataAccess;
+import Models.Event;
+
 /**
  * Data Access Object for the event. Inserts, deletes, and clears the event table in the database.
  */
@@ -17,6 +20,10 @@ public class EventDAO {
      * @return a boolean of whether or not the event was deleted from the event table in the database
      */
     public boolean delete(Event event) {
+        return false;
+    } //don't think i need this method
+
+    public boolean find(Event event) {
         return false;
     }
 

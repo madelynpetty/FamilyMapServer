@@ -1,8 +1,6 @@
 import com.google.gson.*;
 
 import java.io.*;
-import java.lang.reflect.Array;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Iterator;
 
@@ -10,6 +8,13 @@ import java.util.Iterator;
  * Main method for the project
  */
 public class FamilyMapServer {
+    public static ArrayList<String> femaleNameArray;
+    public static ArrayList<String> maleNameArray;
+    public static ArrayList<String> surnameArray;
+    public static ArrayList<String> countryArray;
+    public static ArrayList<String> cityArray;
+    public static ArrayList<Float> latitudeArray;
+    public static ArrayList<Float> longitudeArray;
 
     /**
      * parses JSONObjects to call methods and parse the names into individual arrays.
@@ -18,15 +23,14 @@ public class FamilyMapServer {
      */
 
     public static void main(String[] args) throws Exception{
-        ArrayList<String> femaleNameArray = parseFemaleFile();
-        ArrayList<String> maleNameArray = parseMaleFile();
-        ArrayList<String> surnameArray = parseSurnameFile();
+        femaleNameArray = parseFemaleFile();
+        maleNameArray = parseMaleFile();
+        surnameArray = parseSurnameFile();
 
-        ArrayList<String> locations = parseLocationsFile();
-        ArrayList<String> countryArray = getCountryArray(locations);
-        ArrayList<String> cityArray = getCityArray(locations);
-        ArrayList<Float> latitudeArray = getLatitudeArray(locations);
-        ArrayList<Float> longitudeArray = getLongitudeArray(locations);
+        countryArray = setCountryArray();
+        cityArray = setCityArray();
+        latitudeArray = setLatitudeArray();
+        longitudeArray = setLongitudeArray();
     }
 
     /**
@@ -95,29 +99,7 @@ public class FamilyMapServer {
         return surnameArray;
     }
 
-    /**
-     * Parses the locations into an ArrayList of Strings in which there are countries, cities, latitudes, and longitudes.
-     * @return ArrayList<String>
-     * @throws Exception
-     */
-    private static ArrayList<String> parseLocationsFile() throws Exception {
-        ArrayList<String> locationsArray = new ArrayList<>();
-        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/json/locations.json"));
-        try {
-            JsonObject jo = (JsonObject) obj;
-            JsonArray locations = (JsonArray) jo.get("data");
-            Iterator<JsonElement> iterator = locations.iterator();
-            while (iterator.hasNext()) {
-                locationsArray.add(iterator.next().toString());
-            }
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        return locationsArray;
-    }
-
-    private static ArrayList<String> getCountryArray(ArrayList<String> locations) throws Exception {
+    private static ArrayList<String> setCountryArray() throws Exception {
 //        ArrayList<String> countries = new ArrayList<>();
 //        InputStream is = new FileInputStream("/Users/maddie/IdeaProjects/FamilyMap/json/locations.json");
 //        Reader r = new InputStreamReader(is, "UTF-8");
@@ -131,19 +113,99 @@ public class FamilyMapServer {
 //        }
 //        return countries;
 
+
+//        JsonObject obj;
+//        String fileName = "/Users/maddie/IdeaProjects/FamilyMap/json/locations.json";
+//        String line = null;
+//
+//        try {
+//            FileReader fileReader = new FileReader(fileName);
+//            BufferedReader bufferedReader = new BufferedReader(fileReader);
+//
+//            while((line = bufferedReader.readLine()) != null) {
+//                obj = (JsonObject) new JsonParser().parse(line);
+//                countries.add(obj.get("country").toString());
+//            }
+//        }
+//        catch (Exception e) {
+//            e.printStackTrace();
+//        }
         ArrayList<String> countries = new ArrayList<>();
+        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/json/locations.json"));
+        try {
+            JsonObject jo = (JsonObject) obj;
+            JsonArray countryJSON = jo.get("data").getAsJsonArray();
+            Iterator<JsonElement> iterator = countryJSON.iterator();
+            for (int i = 0; i < countryJSON.size(); i++) {
+                JsonObject location = (JsonObject) countryJSON.get(i);
+                String country = location.get("country").toString();
+                countries.add(country);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return countries;
     }
 
-    private static ArrayList<String> getCityArray(ArrayList<String> locations) {
-        return null;
+    private static ArrayList<String> setCityArray() throws Exception {
+        ArrayList<String> cities = new ArrayList<>();
+        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/json/locations.json"));
+        try {
+            JsonObject jo = (JsonObject) obj;
+            JsonArray cityJSON = jo.get("data").getAsJsonArray();
+            Iterator<JsonElement> iterator = cityJSON.iterator();
+            for (int i = 0; i < cityJSON.size(); i++) {
+                JsonObject location = (JsonObject) cityJSON.get(i);
+                String country = location.get("city").toString();
+                cities.add(country);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return cities;
     }
 
-    private static ArrayList<Float> getLatitudeArray(ArrayList<String> locations) {
-        return null;
+    private static ArrayList<Float> setLatitudeArray() throws Exception {
+        ArrayList<Float> latitudes = new ArrayList<>();
+        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/json/locations.json"));
+        try {
+            JsonObject jo = (JsonObject) obj;
+            JsonArray longitudeJSON = jo.get("data").getAsJsonArray();
+            Iterator<JsonElement> iterator = longitudeJSON.iterator();
+            for (int i = 0; i < longitudeJSON.size(); i++) {
+                JsonObject location = (JsonObject) longitudeJSON.get(i);
+                Float country = location.get("latitude").getAsFloat();
+                latitudes.add(country);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return latitudes;
     }
 
-    private static ArrayList<Float> getLongitudeArray(ArrayList<String> locations) {
-        return null;
+    private static ArrayList<Float> setLongitudeArray() throws Exception {
+        ArrayList<Float> longitudes = new ArrayList<>();
+        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/json/locations.json"));
+        try {
+            JsonObject jo = (JsonObject) obj;
+            JsonArray latitudeJSON = jo.get("data").getAsJsonArray();
+            Iterator<JsonElement> iterator = latitudeJSON.iterator();
+            for (int i = 0; i < latitudeJSON.size(); i++) {
+                JsonObject location = (JsonObject) latitudeJSON.get(i);
+                Float country = location.get("latitude").getAsFloat();
+                longitudes.add(country);
+            }
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return longitudes;
     }
 }

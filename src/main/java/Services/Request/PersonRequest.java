@@ -1,6 +1,6 @@
-package Request;
+package Services.Request;
 
-import passoffmodels.Person;
+import Models.Person;
 
 /**
  * Takes the request and turns it into a Java object

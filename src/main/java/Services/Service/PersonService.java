@@ -1,7 +1,6 @@
-package Service;
-
-import Request.PersonRequest;
-import Result.PersonResult;
+package Services.Service;
+import Services.Result.PersonResult;
+import Services.Request.PersonRequest;
 
 /**
  * The PersonService makes the request and returns the result

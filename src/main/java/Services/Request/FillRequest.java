@@ -1,4 +1,4 @@
-package Request;
+package Services.Request;
 
 /**
  * Takes the request and turns it into a Java object

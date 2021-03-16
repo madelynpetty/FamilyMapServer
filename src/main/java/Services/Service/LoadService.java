@@ -1,6 +1,6 @@
-package Service;
-import Request.LoadRequest;
-import Result.LoadResult;
+package Services.Service;
+import Services.Result.LoadResult;
+import Services.Request.LoadRequest;
 
 /**
  * The LoadService makes the request and returns the result

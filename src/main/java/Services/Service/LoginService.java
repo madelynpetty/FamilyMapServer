@@ -1,7 +1,6 @@
-package Service;
-
-import Request.LoginRequest;
-import Result.LoginResult;
+package Services.Service;
+import Services.Result.LoginResult;
+import Services.Request.LoginRequest;
 
 /**
  * The LoginService makes the request and returns the result

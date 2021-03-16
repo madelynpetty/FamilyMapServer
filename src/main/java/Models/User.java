@@ -1,3 +1,5 @@
+package Models;
+
 /**
  * In order to use Family Map, one must first create a user account. The server stores information about each user account in its database.
  */

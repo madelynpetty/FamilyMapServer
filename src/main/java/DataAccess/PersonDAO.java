@@ -1,3 +1,6 @@
+package DataAccess;
+import Models.Person;
+
 /**
  * Data Access Object for the person. Inserts, deletes, and clears the person table in the database.
  */
@@ -17,6 +20,10 @@ public class PersonDAO {
      * @return a boolean of whether or not the pesron was deleted from the person table in the database
      */
     public boolean delete(Person person) {
+        return false;
+    } //don't think i need this
+
+    public boolean find(Person person) {
         return false;
     }
 

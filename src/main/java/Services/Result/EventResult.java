@@ -1,4 +1,4 @@
-package Result;
+package Services.Result;
 
 /**
  * The response based on the success of the service

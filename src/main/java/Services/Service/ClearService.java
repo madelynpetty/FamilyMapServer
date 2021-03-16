@@ -1,6 +1,5 @@
-package Service;
-
-import Result.ClearResult;
+package Services.Service;
+import Services.Result.ClearResult;
 
 /**
  * The ClearService makes the request and returns the result

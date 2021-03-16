@@ -1,7 +1,6 @@
-package Service;
-
-import Request.RegisterRequest;
-import Result.RegisterResult;
+package Services.Service;
+import Services.Result.RegisterResult;
+import Services.Request.RegisterRequest;
 
 /**
  * The RegisterService makes the request and returns the result

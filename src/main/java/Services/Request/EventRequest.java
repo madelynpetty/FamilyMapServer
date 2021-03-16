@@ -1,5 +1,5 @@
-package Request;
-import jdk.jfr.Event;
+package Services.Request;
+import Models.Event;
 
 /**
  * Takes the request and turns it into a Java object

@@ -1,3 +1,5 @@
+package DataAccess;
+import Models.User;
 /**
  * Data Access Object for the user. Inserts, deletes, and clears the user table in the database.
  */
@@ -19,6 +21,10 @@ public class UserDAO {
      * @return a boolean of whether or not the user was deleted from the user table in the database
      */
     public boolean delete(User user) {
+        return false;
+    } //don't think i need this
+
+    public boolean find(User user) {
         return false;
     }
 

@@ -1,3 +1,5 @@
+package Models;
+
 /**
  * Each generated Event has the following properties: eventID, username, personID, latitude, longitude, country, city, eventType, and year.
  */

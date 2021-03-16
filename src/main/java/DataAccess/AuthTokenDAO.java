@@ -1,7 +1,11 @@
+package DataAccess;
+import Models.AuthToken;
+
 /**
  * Data Access Object for the authToken. Inserts, deletes, and clears the authToken table in the database.
  */
 public class AuthTokenDAO {
+
     /**
      * Inserts an authToken into the authToken table in the database
      * @param authtoken the authToken to be added to the database
@@ -17,6 +21,10 @@ public class AuthTokenDAO {
      * @return a boolean of whether or not the authToken was deleted from the authToken table in the database
      */
     public boolean delete(AuthToken authtoken) {
+        return false;
+    } //don't think i need this
+
+    public boolean find(AuthToken authToken) {
         return false;
     }
 

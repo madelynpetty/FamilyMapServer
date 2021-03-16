@@ -1,4 +1,4 @@
-package Service;
+package Services.Service;
 import Request.EventRequest;
 import Result.EventResult;
 

@@ -1,6 +1,6 @@
-package Service;
-import Request.FillRequest;
-import Result.FillResult;
+package Services.Service;
+import Services.Result.FillResult;
+import Services.Request.FillRequest;
 
 /**
  * The FillService makes the request and returns the result
