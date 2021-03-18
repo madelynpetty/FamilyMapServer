@@ -9,6 +9,7 @@ public class ClearService {
      * Returns the result of calling the Clear Service
      */
     private ClearResult callClearService() {
+        ClearResult result = new ClearResult();
         return null;
     }
 }

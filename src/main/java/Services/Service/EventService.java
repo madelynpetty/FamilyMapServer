@@ -1,6 +1,6 @@
 package Services.Service;
-import Request.EventRequest;
-import Result.EventResult;
+import Services.Request.EventRequest;
+import Services.Result.EventResult;
 
 /**
  * The EventService makes the request and returns the result

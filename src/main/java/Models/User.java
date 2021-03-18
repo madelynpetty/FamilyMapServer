@@ -11,7 +11,7 @@ public class User {
     private String lastName;
     private String gender;
     private String personID; //non empty
-    private String authToken;
+//    private String authToken;
 
 
     /**
@@ -145,21 +145,21 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-
-    /**
-     * Returns the user's unique authtoken
-     * @return String
-     */
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    /**
-     * Sets user's unique authToken
-     * @param authToken String
-     */
-    public void setAuthToken(String authToken) {
-        this.authToken = authToken;
-    }
+//
+//    /**
+//     * Returns the user's unique authtoken
+//     * @return String
+//     */
+//    public String getAuthToken() {
+//        return authToken;
+//    }
+//
+//    /**
+//     * Sets user's unique authToken
+//     * @param authToken String
+//     */
+//    public void setAuthToken(String authToken) {
+//        this.authToken = authToken;
+//    }
 
 }

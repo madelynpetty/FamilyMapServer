@@ -1,53 +1,76 @@
 package DataAccess;
 import Models.AuthToken;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
- * Data Access Object for the authToken. Inserts, deletes, and clears the authToken table in the database.
+ * Data Access Object for the AuthToken. Inserts, deletes, and clears the person table in the database.
  */
 public class AuthTokenDAO {
+    private final Connection conn;
+
+    public AuthTokenDAO(Connection conn) {
+        this.conn = conn;
+    }
 
     /**
-     * Inserts an authToken into the authToken table in the database
-     * @param authtoken the authToken to be added to the database
+     * Inserts the authToken into the authToken table in the database
+     * @param authToken the authToken to be added to the database
      * @return a boolean of whether or not the authToken was added to the authToken table in the database
      */
-    public boolean insert(AuthToken authtoken) {
-        return false;
+    public void insert(AuthToken authToken) throws DataAccessException {
+        //We can structure our string to be similar to a sql command, but if we insert question
+        //marks we can change them later with help from the statement
+        String sql = "INSERT INTO authToken (username, token) VALUES(?,?)";
+
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            //Using the statements built-in set(type) functions we can pick the question mark we want
+            //to fill in and give it a proper value. The first argument corresponds to the first
+            //question mark found in our sql String
+            stmt.setString(1, authToken.getUsername());
+            stmt.setString(2, authToken.getAuthToken());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while inserting into the database");
+        }
+    }
+
+    public AuthToken find(String token) throws DataAccessException {
+        AuthToken authToken;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM authToken WHERE token = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, token);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                authToken = new AuthToken(rs.getString("username"), rs.getString("token"));
+                return authToken;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding authToken");
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return null;
     }
 
     /**
-     * Deletes the authToken from the authToken table in the database
-     * @param authtoken the authToken to be deleted from the database
-     * @return a boolean of whether or not the authToken was deleted from the authToken table in the database
+     * Clears the person table in the database
+     * @return a boolean of whether or not the person table in the database was cleared
      */
-    public boolean delete(AuthToken authtoken) {
-        return false;
-    } //don't think i need this
-
-    public boolean find(AuthToken authToken) {
-        return false;
-    }
-
-    /**
-     * Clears the authToken table in the database
-     * @return a boolean of whether or not the authToken table in the database was cleared
-     */
-    public boolean clear() {
-        return false;
-    }
-
-//    String username;
-//    String password;
-//    String authToken;
-//    public String getUsername(User user) {
-//        return user.getUsername();
+//    public boolean clear() {
+//        return false;
 //    }
-//
-//    public String getPassword(User user) {
-//        return user.getPassword();
-//    }
-//
-//    public String getAuthToken(User user) {
-//        return user.getAuthToken();
-//    }
+
 }

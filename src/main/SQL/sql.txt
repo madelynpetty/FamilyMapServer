@@ -1,0 +1,46 @@
+create table user (
+	username string not null unique,
+    password string not null,
+    email string not null,
+    firstName string not null,
+    lastName string not null,
+    gender string not null,
+    personID string not null,
+    primary key("username"),
+    foreign key("personID") references"person"("personID")
+);
+
+create table person (
+	personID string not null,
+	username string not null,
+    firstName string not null,
+    lastName string not null,
+    gender string not null,
+    fatherID string,
+    motherID string,
+    spouseID string,
+    primary key("personID"),
+    foreign key("username") references "user"("username")
+);
+
+create table event (
+	eventID string not null unique,
+	username string not null,
+	personID string not null,
+	latitude float not null,
+	longitude float not null,
+	country string not null,
+	city string not null,
+	eventType string not null,
+	year int not null,
+	primary key("eventID"),
+	foreign key("personID") references "person"("personID"),
+	foreign key("username") references "user"("username")
+);
+
+create table authToken (
+	username string not null,
+	token string not null unique,
+	primary key("token"),
+	foreign key("username") references "user"("username")
+);

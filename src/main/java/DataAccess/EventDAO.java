@@ -1,17 +1,80 @@
 package DataAccess;
 import Models.Event;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Data Access Object for the event. Inserts, deletes, and clears the event table in the database.
  */
 public class EventDAO {
+    private final Connection conn;
+
+    public EventDAO(Connection conn)
+    {
+        this.conn = conn;
+    }
+
     /**
      * Inserts the event into the event table in the database
      * @param event the event to be added to the database
      * @return a boolean of whether or not the event was added to the event table in the database
      */
-    public boolean insert(Event event) {
-        return false;
+    public void insert(Event event) throws DataAccessException {
+        //We can structure our string to be similar to a sql command, but if we insert question
+        //marks we can change them later with help from the statement
+        String sql = "INSERT INTO event (eventID, username, personID, latitude, longitude, " +
+                "country, city, eventType, year) VALUES(?,?,?,?,?,?,?,?,?)";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            //Using the statements built-in set(type) functions we can pick the question mark we want
+            //to fill in and give it a proper value. The first argument corresponds to the first
+            //question mark found in our sql String
+            stmt.setString(1, event.getEventID());
+            stmt.setString(2, event.getUsername());
+            stmt.setString(3, event.getPersonID());
+            stmt.setFloat(4, event.getLatitude());
+            stmt.setFloat(5, event.getLongitude());
+            stmt.setString(6, event.getCountry());
+            stmt.setString(7, event.getCity());
+            stmt.setString(8, event.getEventType());
+            stmt.setInt(9, event.getYear());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new DataAccessException("Error encountered while inserting into the database");
+        }
+    }
+
+    public Event find(String eventID) throws DataAccessException {
+        Event event;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM event WHERE eventID = ?;";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, eventID);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                event = new Event(rs.getString("eventID"), rs.getString("username"),
+                        rs.getString("personID"), rs.getFloat("latitude"),
+                        rs.getFloat("longitude"), rs.getString("country"),
+                        rs.getString("city"), rs.getString("eventType"),
+                        rs.getInt("year"));
+                return event;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding event");
+        } finally {
+            if(rs != null) {
+                try {
+                    rs.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        }
+        return null;
     }
 
     /**
@@ -23,9 +86,6 @@ public class EventDAO {
         return false;
     } //don't think i need this method
 
-    public boolean find(Event event) {
-        return false;
-    }
 
     /**
      * Clears the event table in the database
@@ -34,88 +94,4 @@ public class EventDAO {
     public boolean clear() {
         return false;
     }
-
-
-//    private String associatedUsername; // Username of user account this event belongs to (non-empty string)
-//    private String eventID; // Event’s unique ID (non-empty string)
-//    private String personID; // ID of the person this event belongs to (non-empty string)
-//    private double latitude; // Latitude of the event’s location (number)
-//    private double longitude; // Longitude of the event’s location (number)
-//    private String country; // Name of country where event occurred (non-empty string)
-//    private String city; // Name of city where event occurred (non-empty string)
-//    private String eventType; // Type of event (“birth”, “baptism”, etc.) (non-empty string)
-//    private int year; //Year the event occurred (integer)
-//    private boolean success = false; //boolean identifier
-//    public String getAssociatedUsername() {
-//        return associatedUsername;
-//    }
-//
-//    public void setAssociatedUsername(String associatedUsername) {
-//        this.associatedUsername = associatedUsername;
-//    }
-//
-//    public String getEventID() {
-//        return eventID;
-//    }
-//
-//    public void setEventID(String eventID) {
-//        this.eventID = eventID;
-//    }
-//
-//    public String getPersonID() {
-//        return personID;
-//    }
-//
-//    public void setPersonID(String personID) {
-//        this.personID = personID;
-//    }
-//
-//    public double getLatitude() {
-//        return latitude;
-//    }
-//
-//    public void setLatitude(double latitude) {
-//        this.latitude = latitude;
-//    }
-//
-//    public double getLongitude() {
-//        return longitude;
-//    }
-//
-//    public void setLongitude(double longitude) {
-//        this.longitude = longitude;
-//    }
-//
-//    public String getCountry() {
-//        return country;
-//    }
-//
-//    public void setCountry(String country) {
-//        this.country = country;
-//    }
-//
-//    public String getCity() {
-//        return city;
-//    }
-//
-//    public void setCity(String city) {
-//        this.city = city;
-//    }
-//
-//    public String getEventType() {
-//        return eventType;
-//    }
-//
-//    public void setEventType(String eventType) {
-//        this.eventType = eventType;
-//    }
-//
-//    public int getYear() {
-//        return year;
-//    }
-//
-//    public void setYear(int year) {
-//        this.year = year;
-//    }
-
 }
