@@ -30,4 +30,5 @@ public class RegisterResult {
     public String getMessage() {
         return message;
     }
+
 }

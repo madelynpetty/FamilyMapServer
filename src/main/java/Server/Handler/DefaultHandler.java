@@ -1,7 +1,6 @@
 package Server.Handler;
 
-import Server.StringUtil;
-import com.sun.net.httpserver.Headers;
+import Utils.StringUtil;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
@@ -27,8 +26,7 @@ public class DefaultHandler implements HttpHandler {
                 path = "web/" + uri;
             }
 
-            StringUtil stringUtil = new StringUtil();
-            String respData = stringUtil.getStringFromInputStream(exchange.getRequestBody());
+            String respData = StringUtil.getStringFromInputStream(exchange.getRequestBody());
 
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
             OutputStream respBody = exchange.getResponseBody();

@@ -1,13 +1,18 @@
+package Utils;
+
 import com.google.gson.*;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Random;
 
 /**
  * Main method for the project
  */
-public class JSONParser {
+public class RandomDataUtils {
+    private static RandomDataUtils instance;
+
     public static ArrayList<String> femaleNameArray;
     public static ArrayList<String> maleNameArray;
     public static ArrayList<String> surnameArray;
@@ -16,13 +21,37 @@ public class JSONParser {
     public static ArrayList<Float> latitudeArray;
     public static ArrayList<Float> longitudeArray;
 
+    public static void init() throws Exception {
+        instance = new RandomDataUtils();
+        parseFiles();
+    }
+
+    public static RandomDataUtils getInstance() throws Exception {
+        if (instance == null) {
+            init();
+        }
+        return instance;
+    }
+
+    public String getRandomFemaleName() {
+        return femaleNameArray.get(getRandomNumber(femaleNameArray.size()));
+    }
+
+    public String getRandomSurname() {
+        return surnameArray.get(getRandomNumber(surnameArray.size()));
+    }
+
+    private static int getRandomNumber(int range) {
+        Random rand = new Random();
+        int x = rand.nextInt(range);
+        return x;
+    }
+
     /**
-     * parses JSONObjects to call methods and parse the names into individual arrays.
-     * @param args
-     * @throws Exception
+     * Parses JSONObjects to call methods and parse the names into individual arrays.
      */
 
-    public static void main(String[] args) throws Exception{
+    private static void parseFiles() throws Exception {
         femaleNameArray = parseFemaleFile();
         maleNameArray = parseMaleFile();
         surnameArray = parseSurnameFile();
@@ -31,8 +60,6 @@ public class JSONParser {
         cityArray = setCityArray();
         latitudeArray = setLatitudeArray();
         longitudeArray = setLongitudeArray();
-
-
 
     }
 
@@ -43,12 +70,18 @@ public class JSONParser {
     private static ArrayList<String> parseFemaleFile() throws Exception {
         ArrayList<String> femaleNameArray = new ArrayList<>();
         Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/json/fnames.json"));
+
         try {
+//            for (Iterator<String> itr = jo.keySet().iterator(); itr.hasNext(); ) {
+//                String key = (String) itr.next();
+//                femaleNameArray.add(key);
+//            }
+
             JsonObject jo = (JsonObject) obj;
             JsonArray femaleNames = (JsonArray) jo.get("data");
             Iterator<JsonElement> iterator = femaleNames.iterator();
             while (iterator.hasNext()) {
-                femaleNameArray.add(iterator.next().toString());
+                femaleNameArray.add(iterator.next().getAsString());
             }
         }
         catch (Exception e) {
@@ -70,7 +103,7 @@ public class JSONParser {
             JsonArray maleNames = (JsonArray) jo.get("data");
             Iterator<JsonElement> iterator = maleNames.iterator();
             while (iterator.hasNext()) {
-                maleNameArray.add(iterator.next().toString());
+                maleNameArray.add(iterator.next().getAsString());
             }
         }
         catch (Exception e) {
@@ -92,7 +125,7 @@ public class JSONParser {
             JsonArray surnameNames = (JsonArray) jo.get("data");
             Iterator<JsonElement> iterator = surnameNames.iterator();
             while (iterator.hasNext()) {
-                surnameArray.add(iterator.next().toString());
+                surnameArray.add(iterator.next().getAsString());
             }
         }
         catch (Exception e) {
@@ -141,7 +174,7 @@ public class JSONParser {
             Iterator<JsonElement> iterator = countryJSON.iterator();
             for (int i = 0; i < countryJSON.size(); i++) {
                 JsonObject location = (JsonObject) countryJSON.get(i);
-                String country = location.get("country").toString();
+                String country = location.get("country").getAsString();
                 countries.add(country);
             }
         }
@@ -161,7 +194,7 @@ public class JSONParser {
             Iterator<JsonElement> iterator = cityJSON.iterator();
             for (int i = 0; i < cityJSON.size(); i++) {
                 JsonObject location = (JsonObject) cityJSON.get(i);
-                String country = location.get("city").toString();
+                String country = location.get("city").getAsString();
                 cities.add(country);
             }
         }

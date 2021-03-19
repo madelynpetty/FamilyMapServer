@@ -1,12 +1,10 @@
 package Server;
 
-import Server.Handler.RegisterHandler;
+import Server.Handler.*;
 import com.sun.net.httpserver.HttpServer;
-import Server.Handler.DefaultHandler;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import Server.Handler.*;
 
 public class Server {
     private static final int MAX_WAITING_CONNECTIONS = 10;
@@ -32,11 +30,11 @@ public class Server {
         server.createContext("/",  new DefaultHandler());
         server.createContext("/user/register", new RegisterHandler());
         server.createContext("/user/login", new LoginHandler());
-//        server.createContext("/clear", new ClearHandler());
-//        server.createContext("/fill", new FillHandler());
-//        server.createContext("/load", new LoadHandler());
-//        server.createContext("/person", new PersonHandler());
-//        server.createContext("/event", new EventHandler());
+        server.createContext("/clear", new ClearHandler());
+        server.createContext("/fill", new FillHandler());
+        server.createContext("/load", new LoadHandler());
+        server.createContext("/person", new PersonHandler());
+        server.createContext("/event", new EventHandler());
 
         server.start();
         System.out.println("FamilyMapServer listening on port " + portNum);

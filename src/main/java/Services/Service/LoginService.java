@@ -5,14 +5,11 @@ import DataAccess.Database;
 import DataAccess.UserDAO;
 import Models.AuthToken;
 import Models.User;
+import Utils.StringUtil;
 import Services.Result.LoginResult;
 import Services.Request.LoginRequest;
 
-import javax.xml.crypto.Data;
-import java.nio.charset.Charset;
 import java.sql.Connection;
-import java.util.Random;
-import java.net.HttpURLConnection;
 
 /**
  * The LoginService makes the request and returns the result
@@ -46,10 +43,7 @@ public class LoginService {
                 AuthToken authToken = null;
                 String newAuthToken = null;
                 do {
-                    //TODO CHECK TO MAKE SURE THIS CODE WORKS
-                    byte[] array = new byte[7]; // length is bounded by 7
-                    new Random().nextBytes(array);
-                    newAuthToken = new String(array, Charset.forName("UTF-8"));
+                    newAuthToken = StringUtil.getRandomID();
                     authToken = authTokenDAO.find(newAuthToken);
                 } while (authToken != null && authToken.getAuthToken() == newAuthToken);
 
@@ -64,7 +58,7 @@ public class LoginService {
             throw new Exception("Error: cannot get connection to database");
         }
         catch (Exception e) {
-            throw new Exception("Error: Something went wrong with LoginService");
+            throw e;
         }
         finally {
             try {

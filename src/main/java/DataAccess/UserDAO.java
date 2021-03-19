@@ -1,15 +1,12 @@
 package DataAccess;
 import Models.User;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+
+import java.sql.*;
 
 /**
  * Data Access Object for the user. Inserts, deletes, and clears the user table in the database.
  */
 public class UserDAO {
-
     private final Connection conn;
 
     public UserDAO(Connection conn) {
@@ -53,10 +50,10 @@ public class UserDAO {
             stmt.setString(1, username);
             rs = stmt.executeQuery();
             if (rs.next()) {
-                user = new User(rs.getString("Gale"), rs.getString("pass123"),
-                        rs.getString("gale@gmail.com"), rs.getString("Gale"),
-                        rs.getString("Johnson"), rs.getString("m"),
-                        rs.getString("Gale123"));
+                user = new User(rs.getString("username"), rs.getString("password"),
+                        rs.getString("email"), rs.getString("firstName"),
+                        rs.getString("lastName"), rs.getString("gender"),
+                        rs.getString("personID"));
                 return user;
             }
         } catch (SQLException e) {
@@ -75,10 +72,41 @@ public class UserDAO {
         return null;
     }
 
-    public User login(String username, String password) {
+    public User login(String username, String password) throws Exception {
         //sql query to see if anything matches username and password
+        User user;
+        ResultSet rs = null;
+        String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, username);
+            stmt.setString(2, password);
+            rs = stmt.executeQuery();
+            if (rs.next()) {
+                user = new User(rs.getString("username"), rs.getString("password"),
+                        rs.getString("email"), rs.getString("firstName"),
+                        rs.getString("lastName"), rs.getString("gender"),
+                        rs.getString("personID"));
+                return user;
+            }
+            else {
+                throw new Exception("No matching username and password");
+            }
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+            throw new DataAccessException("Error encountered while finding user");
+        }
+        finally {
+            if (rs != null) {
+                try {
+                    rs.close();
+                }
+                catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
 
-        return null;
+        }
     }
 
     /**
@@ -86,8 +114,43 @@ public class UserDAO {
      *
      * @return a boolean of whether or not the user table in the database was cleared
      */
-    public boolean clear() {
-        return false;
+    public boolean clear() throws DataAccessException, SQLException {
+        try (Statement stmt = conn.createStatement()) {
+            String sql = "DELETE FROM event";
+            stmt.executeUpdate(sql);
+            sql = "DELETE FROM user";
+            stmt.executeUpdate(sql);
+            sql = "DELETE FROM person";
+            stmt.executeUpdate(sql);
+            sql = "DELETE FROM authToken";
+            stmt.executeUpdate(sql);
+        } catch (SQLException e) {
+            throw new DataAccessException("SQL Error encountered while clearing tables");
+        }
+        return true;
     }
-
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

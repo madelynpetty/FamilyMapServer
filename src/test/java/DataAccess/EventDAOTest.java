@@ -1,15 +1,10 @@
 package DataAccess;
 
-import DataAccess.DataAccessException;
-import DataAccess.Database;
-import DataAccess.EventDAO;
 import Models.Event;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
 import java.sql.Connection;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 //We will use this to test that our insert method is working and failing in the right ways
@@ -19,8 +14,7 @@ public class EventDAOTest {
     private EventDAO eDao;
 
     @BeforeEach
-    public void setUp() throws DataAccessException
-    {
+    public void setUp() throws DataAccessException {
         //here we can set up any classes or variables we will need for the rest of our tests
         //lets create a new database
         db = new Database();

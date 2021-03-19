@@ -1,10 +1,7 @@
-package Services.Service;
+package Services;
 
 import Services.Request.LoginRequest;
-import Services.Result.LoginResult;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class LoginServiceTest {
 

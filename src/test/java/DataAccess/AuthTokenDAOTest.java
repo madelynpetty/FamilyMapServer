@@ -1,7 +1,6 @@
 package DataAccess;
 
 import Models.AuthToken;
-import Models.Event;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +20,7 @@ public class AuthTokenDAOTest {
         //lets create a new database
         db = new Database();
         //and a new event with random data
-        bestAuthToken = new AuthToken("Biking_123A", "Gale");
+        bestAuthToken = new AuthToken("Gale", "Gale123A");
         //Here, we'll open the connection in preparation for the test case to use it
         Connection conn = db.getConnection();
         //Let's clear the database as well so any lingering data doesn't affect our tests
