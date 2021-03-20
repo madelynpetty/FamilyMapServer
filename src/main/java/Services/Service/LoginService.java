@@ -38,16 +38,10 @@ public class LoginService {
                 loginResult = new LoginResult("Error: Invalid username/password combination");
             }
             else {
-                //create authtoken here for logged in user
+                //create authToken here for logged in user
                 AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
-                AuthToken authToken = null;
-                String newAuthToken = null;
-                do {
-                    newAuthToken = StringUtil.getRandomID();
-                    authToken = authTokenDAO.find(newAuthToken);
-                } while (authToken != null && authToken.getAuthToken() == newAuthToken);
-
-                authToken = new AuthToken(request.getUsername(), newAuthToken);
+                String authTokenID = StringUtil.getRandomAuthToken();
+                AuthToken authToken = new AuthToken(request.getUsername(), authTokenID);
                 authTokenDAO.insert(authToken);
 
                 loginResult = new LoginResult(authToken.getAuthToken(), user.getUsername(), user.getPersonID());

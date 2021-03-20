@@ -1,15 +1,19 @@
 package Server;
-
+import DataAccess.DataAccessException;
+import DataAccess.Database;
+import DataAccess.UserDAO;
+import Models.User;
 import Server.Handler.*;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.sql.Connection;
 
 public class Server {
     private static final int MAX_WAITING_CONNECTIONS = 10;
-    public static void main(String[] args) {
-        String portNum = "8080"; //args[0];
+    public static void main(String args[]) {
+        String portNum = "8080";
         new Server().run(portNum);
     }
 

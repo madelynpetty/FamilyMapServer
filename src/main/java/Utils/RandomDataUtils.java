@@ -33,6 +33,10 @@ public class RandomDataUtils {
         return instance;
     }
 
+    public String getRandomMaleName() {
+        return maleNameArray.get(getRandomNumber(maleNameArray.size()));
+    }
+
     public String getRandomFemaleName() {
         return femaleNameArray.get(getRandomNumber(femaleNameArray.size()));
     }
@@ -41,9 +45,31 @@ public class RandomDataUtils {
         return surnameArray.get(getRandomNumber(surnameArray.size()));
     }
 
-    private static int getRandomNumber(int range) {
+    public String getRandomCountry() {
+        return countryArray.get(getRandomNumber(countryArray.size()));
+    }
+
+    public float getRandomLatitude() {
+        return latitudeArray.get(getRandomNumber(latitudeArray.size()));
+    }
+
+    public float getRandomLongitude() {
+        return longitudeArray.get(getRandomNumber(longitudeArray.size()));
+    }
+
+    public String getRandomCity() {
+        return cityArray.get(getRandomNumber(cityArray.size()));
+    }
+
+    public static int getRandomNumber(int range) {
         Random rand = new Random();
         int x = rand.nextInt(range);
+        return x;
+    }
+
+    public static int getRandomNumber(int min, int max) {
+        Random rand = new Random();
+        int x = min + rand.nextInt(max - min);
         return x;
     }
 

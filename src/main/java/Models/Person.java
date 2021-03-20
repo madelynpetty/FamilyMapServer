@@ -1,5 +1,7 @@
 package Models;
 
+import java.util.ArrayList;
+
 /**
  * Each generated Person has the following properties: personID, username, firstName, lastName, gender, fatherID, motherID, spouseID
  */
@@ -12,6 +14,8 @@ public class Person {
     private String fatherID;
     private String motherID;
     private String spouseID;
+    private int generation;
+    private int birthYear;
 
     /**
      * Creates a Person with the following objects: personID, username, firstName, lastName, gender, fatherID, motherID, spouseID
@@ -161,5 +165,21 @@ public class Person {
      */
     public void setSpouseID(String spouseID) {
         this.spouseID = spouseID;
+    }
+
+    public int getGeneration() {
+        return generation;
+    }
+
+    public int getBirthYear() {
+        return birthYear;
+    }
+
+    public void setBirthYear(int birthYear) {
+        this.birthYear = birthYear;
+    }
+
+    public void setGeneration(int generation) {
+        this.generation = generation;
     }
 }

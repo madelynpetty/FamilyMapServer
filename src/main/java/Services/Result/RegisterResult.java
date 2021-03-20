@@ -14,9 +14,9 @@ public class RegisterResult {
     public RegisterResult(String message) {
         success = false;
         this.message = message;
-        personID = null;
-        username = null;
-        authToken = null;
+//        personID = null;
+//        username = null;
+//        authToken = null;
     }
 
     public RegisterResult(String authToken, String username, String personID) {

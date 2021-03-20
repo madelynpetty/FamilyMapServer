@@ -19,10 +19,9 @@ public class DefaultHandler implements HttpHandler {
         try {
             String uri = exchange.getRequestURI().toString();
             String path;
-            if (uri.equals("/")) {
+            if (uri.equals(null) || uri.equals("/")) {
                 path = "web/index.html";
-            }
-            else {
+            } else {
                 path = "web/" + uri;
             }
 
@@ -34,14 +33,21 @@ public class DefaultHandler implements HttpHandler {
             Path filePath = FileSystems.getDefault().getPath(path);
             Files.copy(filePath, respBody);
             respBody.close();
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
             exchange.getResponseBody().close(); //this is the respBody OutputStream from earlier
             e.printStackTrace();
             throw new IOException("Error: default handle did not work");
         }
+    }
 
+    private void writeString(String str, OutputStream os) throws IOException {
+        OutputStreamWriter sw = new OutputStreamWriter(os);
+        BufferedWriter bw = new BufferedWriter(sw);
+        bw.write(str);
+        bw.flush();
+    }
+}
 
 //        try {
 //
@@ -75,13 +81,3 @@ public class DefaultHandler implements HttpHandler {
 //        catch(IOException e) {
 //            throw new IOException("Error: fill handle did not work");
 //        }
-
-    }
-
-    private void writeString(String str, OutputStream os) throws IOException {
-        OutputStreamWriter sw = new OutputStreamWriter(os);
-        BufferedWriter bw = new BufferedWriter(sw);
-        bw.write(str);
-        bw.flush();
-    }
-}

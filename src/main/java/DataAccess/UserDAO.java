@@ -45,7 +45,7 @@ public class UserDAO {
     public User find(String username) throws DataAccessException {
         User user;
         ResultSet rs = null;
-        String sql = "SELECT * FROM user WHERE username = ?;";
+        String sql = "SELECT * FROM user WHERE username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             rs = stmt.executeQuery();

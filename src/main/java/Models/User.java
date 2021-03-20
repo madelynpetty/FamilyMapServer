@@ -1,4 +1,7 @@
 package Models;
+import Models.Event;
+
+import java.util.ArrayList;
 
 /**
  * In order to use Family Map, one must first create a user account. The server stores information about each user account in its database.
@@ -11,6 +14,7 @@ public class User {
     private String lastName;
     private String gender;
     private String personID; //non empty
+
 //    private String authToken;
 
 
@@ -32,6 +36,7 @@ public class User {
         this.lastName = lastName;
         this.gender = gender;
         this.personID = personID;
+
     }
 
     /**

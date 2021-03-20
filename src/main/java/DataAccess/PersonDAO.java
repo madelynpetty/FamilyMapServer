@@ -40,11 +40,18 @@ public class PersonDAO {
             stmt.setString(8, person.getSpouseID());
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             throw new DataAccessException("Error encountered while inserting into the database");
         }
     }
 
+    /**
+     * Finds the person in the database with given personID
+     * @param personID
+     * @return
+     * @throws DataAccessException
+     */
     public Person find(String personID) throws DataAccessException {
         Person person;
         ResultSet rs = null;
@@ -59,10 +66,12 @@ public class PersonDAO {
                         rs.getString("motherID"), rs.getString("spouseID"));
                 return person;
             }
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             e.printStackTrace();
             throw new DataAccessException("Error encountered while finding person");
-        } finally {
+        }
+        finally {
             if(rs != null) {
                 try {
                     rs.close();
@@ -76,11 +85,29 @@ public class PersonDAO {
     }
 
     /**
-     * Clears the person table in the database
-     * @return a boolean of whether or not the person table in the database was cleared
+     * Updates the person in the person table in the database
+     * @param person the person to be updated in the database
      */
-    public boolean clear() {
-        return false;
+    public void update(Person person) throws DataAccessException {
+        String sql = "UPDATE person SET username = ?, firstName = ?, lastName = ?, gender = ?, " +
+                "fatherID = ?, motherID = ?, spouseID = ? WHERE personID = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setString(1, person.getUsername());
+            stmt.setString(2, person.getFirstName());
+            stmt.setString(3, person.getLastName());
+            stmt.setString(4, person.getGender());
+            stmt.setString(5, person.getFatherID());
+            stmt.setString(6, person.getMotherID());
+            stmt.setString(7, person.getSpouseID());
+            stmt.setString(8, person.getPersonID());
+
+            stmt.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new DataAccessException("Error encountered while updating person in the database");
+        }
     }
+
 
 }
