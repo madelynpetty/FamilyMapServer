@@ -16,29 +16,36 @@ public class RegisterHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
+
         try {
-            RegisterService registerService = new RegisterService();
-            String json = StringUtil.getStringFromInputStream(exchange.getRequestBody());
+            if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
 
-            Gson gson = new Gson();
-            RegisterRequest registerRequest = gson.fromJson(json, RegisterRequest.class); //get json from request
-            RegisterResult registerResult = registerService.callRegisterService(registerRequest);
+                RegisterService registerService = new RegisterService();
+                String json = StringUtil.getStringFromInputStream(exchange.getRequestBody());
 
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-            String response = gson.toJson(registerResult);
-            OutputStream outputStream = exchange.getResponseBody();
-            StringUtil.writeStringToStream(response, outputStream);
-            outputStream.close();
+                Gson gson = new Gson();
+                RegisterRequest registerRequest = gson.fromJson(json, RegisterRequest.class); //get json from request
+                RegisterResult registerResult = registerService.callRegisterService(registerRequest);
+
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                String response = gson.toJson(registerResult);
+                OutputStream outputStream = exchange.getResponseBody();
+                StringUtil.writeStringToStream(response, outputStream);
+                outputStream.close();
+            }
+            else {
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, 0);
+            }
         }
         catch (Exception e) {
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+
             Gson gson = new Gson();
             RegisterResult registerResult = new RegisterResult(e.getMessage());
             String response = gson.toJson(registerResult);
             OutputStream outputStream = exchange.getResponseBody();
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
-
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
         }
         finally {
             exchange.getResponseBody().close();

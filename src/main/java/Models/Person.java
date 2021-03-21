@@ -7,7 +7,7 @@ import java.util.ArrayList;
  */
 public class Person {
     private String personID;
-    private String username;
+    private String associatedUsername;
     private String firstName;
     private String lastName;
     private String gender;
@@ -20,7 +20,7 @@ public class Person {
     /**
      * Creates a Person with the following objects: personID, username, firstName, lastName, gender, fatherID, motherID, spouseID
      * @param personID Unique identifier for this person (non-empty string)
-     * @param username User (Username) to which this person belongs
+     * @param associatedUsername User (Username) to which this person belongs
      * @param firstName Person’s first name (non-empty string)
      * @param lastName Person’s last name (non-empty string)
      * @param gender Person’s gender (string: “f” or “m”)
@@ -28,9 +28,9 @@ public class Person {
      * @param motherID Person ID of person’s mother (possibly null)
      * @param spouseID Person ID of person’s spouse (possibly null)
      */
-    public Person(String personID, String username, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID) {
+    public Person(String personID, String associatedUsername, String firstName, String lastName, String gender, String fatherID, String motherID, String spouseID) {
         this.personID = personID;
-        this.username = username;
+        this.associatedUsername = associatedUsername;
         this.firstName = firstName;
         this.lastName = lastName;
         this.gender = gender;
@@ -59,16 +59,16 @@ public class Person {
      * Returns user's unique username
      * @return String
      */
-    public String getUsername() {
-        return username;
+    public String getAssociatedUsername() {
+        return associatedUsername;
     }
 
     /**
      * Sets the user's unique username
-     * @param username user's unique username
+     * @param associatedUsername user's unique username
      */
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAssociatedUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
     /**
@@ -181,5 +181,25 @@ public class Person {
 
     public void setGeneration(int generation) {
         this.generation = generation;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof Person) {
+            Person oPerson = (Person) o;
+            return oPerson.getPersonID().equals(getPersonID()) &&
+                    oPerson.getAssociatedUsername().equals(getAssociatedUsername()) &&
+                    oPerson.getFirstName().equals(getFirstName()) &&
+                    oPerson.getLastName() == (getLastName()) &&
+                    oPerson.getGender() == (getGender()) &&
+                    oPerson.getFatherID().equals(getFatherID()) &&
+                    oPerson.getMotherID().equals(getMotherID()) &&
+                    oPerson.getSpouseID().equals(getSpouseID());
+        } else {
+            return false;
+        }
     }
 }

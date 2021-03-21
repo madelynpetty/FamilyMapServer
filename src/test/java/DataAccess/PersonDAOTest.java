@@ -15,8 +15,7 @@ public class PersonDAOTest {
     private PersonDAO pDao;
 
     @BeforeEach
-    public void setUp() throws DataAccessException
-    {
+    public void setUp() throws DataAccessException {
         //here we can set up any classes or variables we will need for the rest of our tests
         //lets create a new database
         db = new Database();

@@ -76,7 +76,6 @@ public class RandomDataUtils {
     /**
      * Parses JSONObjects to call methods and parse the names into individual arrays.
      */
-
     private static void parseFiles() throws Exception {
         femaleNameArray = parseFemaleFile();
         maleNameArray = parseMaleFile();
@@ -98,11 +97,6 @@ public class RandomDataUtils {
         Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/json/fnames.json"));
 
         try {
-//            for (Iterator<String> itr = jo.keySet().iterator(); itr.hasNext(); ) {
-//                String key = (String) itr.next();
-//                femaleNameArray.add(key);
-//            }
-
             JsonObject jo = (JsonObject) obj;
             JsonArray femaleNames = (JsonArray) jo.get("data");
             Iterator<JsonElement> iterator = femaleNames.iterator();
@@ -162,36 +156,6 @@ public class RandomDataUtils {
     }
 
     private static ArrayList<String> setCountryArray() throws Exception {
-//        ArrayList<String> countries = new ArrayList<>();
-//        InputStream is = new FileInputStream("/Users/maddie/IdeaProjects/FamilyMap/json/locations.json");
-//        Reader r = new InputStreamReader(is, "UTF-8");
-//        JsonStreamParser p = new JsonStreamParser(r);
-//
-//        while (p.hasNext()) {
-//            JsonElement e = p.next();
-//            if (e.isJsonObject()) {
-//                countries.add(e.toString());
-//            }
-//        }
-//        return countries;
-
-
-//        JsonObject obj;
-//        String fileName = "/Users/maddie/IdeaProjects/FamilyMap/json/locations.json";
-//        String line = null;
-//
-//        try {
-//            FileReader fileReader = new FileReader(fileName);
-//            BufferedReader bufferedReader = new BufferedReader(fileReader);
-//
-//            while((line = bufferedReader.readLine()) != null) {
-//                obj = (JsonObject) new JsonParser().parse(line);
-//                countries.add(obj.get("country").toString());
-//            }
-//        }
-//        catch (Exception e) {
-//            e.printStackTrace();
-//        }
         ArrayList<String> countries = new ArrayList<>();
         Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/json/locations.json"));
         try {

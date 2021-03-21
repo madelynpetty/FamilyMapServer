@@ -6,9 +6,14 @@ import Models.AuthToken;
 import Models.User;
 import Services.Request.FillRequest;
 import Services.Result.FillResult;
+import Services.Result.LoginResult;
 import Utils.StringUtil;
 import Services.Result.RegisterResult;
 import Services.Request.RegisterRequest;
+import com.google.gson.Gson;
+
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.sql.Connection;
 
 /**
@@ -24,6 +29,7 @@ public class RegisterService {
      */
     public RegisterResult callRegisterService(RegisterRequest request) throws Exception {
         Connection conn = null;
+        RegisterResult registerResult;
         try {
             conn = database.getConnection();
             UserDAO userDAO = new UserDAO(conn);
@@ -39,7 +45,7 @@ public class RegisterService {
             AuthToken authToken = new AuthToken(request.getUsername(), authTokenID);
             authTokenDAO.insert(authToken);
 
-            RegisterResult registerResult = new RegisterResult(authTokenID, user.getUsername(), user.getPersonID());
+            registerResult = new RegisterResult(authTokenID, user.getUsername(), user.getPersonID());
 
             if (conn != null) {
                 database.closeConnection(true);
@@ -52,7 +58,7 @@ public class RegisterService {
             return registerResult;
         }
         catch (Exception e) {
-            throw e;
+            throw new Exception("Error: Could not register user.");
         }
         finally {
             try {

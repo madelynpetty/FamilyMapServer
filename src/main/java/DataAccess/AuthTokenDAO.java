@@ -41,7 +41,7 @@ public class AuthTokenDAO {
     public AuthToken find(String token) throws DataAccessException {
         AuthToken authToken;
         ResultSet rs = null;
-        String sql = "SELECT * FROM authToken WHERE token = ?;";
+        String sql = "SELECT * FROM authToken WHERE token = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, token);
             rs = stmt.executeQuery();
@@ -60,7 +60,6 @@ public class AuthTokenDAO {
                     e.printStackTrace();
                 }
             }
-
         }
         return null;
     }

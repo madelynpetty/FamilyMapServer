@@ -3,7 +3,6 @@ import DataAccess.*;
 import Models.Event;
 import Models.Person;
 import Models.User;
-import Services.Result.ClearResult;
 import Services.Result.FillResult;
 import Services.Request.FillRequest;
 import Utils.RandomDataUtils;
@@ -35,6 +34,12 @@ public class FillService {
             UserDAO userDAO = new UserDAO(conn);
             User user = userDAO.find(request.getUsername());
 
+            PersonDAO personDAO = new PersonDAO(conn);
+            personDAO.clear(request.getUsername());
+
+            EventDAO eventDAO = new EventDAO(conn);
+            eventDAO.clear(request.getUsername());
+
             //create person for logged in user
             Person person = new Person(user.getPersonID(), user.getUsername(), user.getFirstName(), user.getLastName(), user.getGender(), null, null, null);
             createPerson(person, conn);
@@ -48,7 +53,6 @@ public class FillService {
 
             //NEED TO CREATE GENERATIONS AND EVENTS HERE
             Person currPerson = null;
-            PersonDAO personDAO = new PersonDAO(conn);
             for (int i = 1; i <= request.getGenerations(); i++) {
                 for (int j = 0; j < people.size(); j++) {
                     currPerson = people.get(j);
@@ -68,7 +72,6 @@ public class FillService {
                         mom.setSpouseID(dad.getPersonID());
 
                         int marriage = mom.getBirthYear() + RandomDataUtils.getRandomNumber(13, 50);
-                        //TODO FIGURE OUT MARRIAGE YEAR
                         if (mom.getBirthYear() > dad.getBirthYear()) {
                             marriage = dad.getBirthYear() + RandomDataUtils.getRandomNumber(13, 50);
                         }
@@ -124,7 +127,7 @@ public class FillService {
             int minDeathDate = birthYear;
 
             //always create birth event first
-            Event birthEvent = new Event(StringUtil.getRandomEventID(), person.getUsername(), person.getPersonID(),
+            Event birthEvent = new Event(StringUtil.getRandomEventID(), person.getAssociatedUsername(), person.getPersonID(),
                     RandomDataUtils.getInstance().getRandomLatitude(), RandomDataUtils.getInstance().getRandomLongitude(),
                     RandomDataUtils.getInstance().getRandomCountry(), RandomDataUtils.getInstance().getRandomCity(),
                     "birth", birthYear);
@@ -139,7 +142,7 @@ public class FillService {
                 if (baptismYear > minDeathDate) {
                     minDeathDate = baptismYear;
                 }
-                Event baptismEvent = new Event(StringUtil.getRandomEventID(), person.getUsername(), person.getPersonID(),
+                Event baptismEvent = new Event(StringUtil.getRandomEventID(), person.getAssociatedUsername(), person.getPersonID(),
                         RandomDataUtils.getInstance().getRandomLatitude(), RandomDataUtils.getInstance().getRandomLongitude(),
                         RandomDataUtils.getInstance().getRandomCountry(), RandomDataUtils.getInstance().getRandomCity(),
                         "baptism", baptismYear);
@@ -152,7 +155,7 @@ public class FillService {
                 if (marriageYear > minDeathDate) {
                     minDeathDate = marriageYear;
                 }
-                Event marriageEvent = new Event(StringUtil.getRandomEventID(), person.getUsername(), person.getPersonID(),
+                Event marriageEvent = new Event(StringUtil.getRandomEventID(), person.getAssociatedUsername(), person.getPersonID(),
                         RandomDataUtils.getInstance().getRandomLatitude(), RandomDataUtils.getInstance().getRandomLongitude(),
                         RandomDataUtils.getInstance().getRandomCountry(), RandomDataUtils.getInstance().getRandomCity(),
                         "marriage", marriageYear);
@@ -164,7 +167,7 @@ public class FillService {
                     deathYear = 2021;
                 }
                 if (birthYear > 2020 - 120 || RandomDataUtils.getRandomNumber(0, 10) > 7) {
-                    Event deathEvent = new Event(StringUtil.getRandomEventID(), person.getUsername(), person.getPersonID(),
+                    Event deathEvent = new Event(StringUtil.getRandomEventID(), person.getAssociatedUsername(), person.getPersonID(),
                             RandomDataUtils.getInstance().getRandomLatitude(), RandomDataUtils.getInstance().getRandomLongitude(),
                             RandomDataUtils.getInstance().getRandomCountry(), RandomDataUtils.getInstance().getRandomCity(),
                             "death", deathYear);

@@ -37,8 +37,9 @@ public class UserDAO {
             stmt.setString(7, user.getPersonID());
 
             stmt.executeUpdate();
-        } catch (SQLException e) {
-            throw new DataAccessException("Error encountered while inserting into the database");
+        }
+        catch (SQLException e) {
+            throw new DataAccessException("Error: Unable to create new user. Try a new username");
         }
     }
 
@@ -129,6 +130,7 @@ public class UserDAO {
         }
         return true;
     }
+
 }
 
 

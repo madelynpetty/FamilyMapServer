@@ -12,7 +12,7 @@ create table user (
 
 create table person (
     personID string not null,
-    username string not null,
+    associatedUsername string not null,
     firstName string not null,
     lastName string not null,
     gender string not null,
@@ -20,12 +20,12 @@ create table person (
     motherID string,
     spouseID string,
     primary key("personID"),
-    foreign key("username") references "user"("username")
+    foreign key("associatedUsername") references "user"("username")
 );
 
 create table event (
     eventID string not null unique,
-    username string not null,
+    associatedUsername string not null,
     personID string not null,
     latitude float not null,
     longitude float not null,
@@ -35,7 +35,7 @@ create table event (
     year int not null,
     primary key("eventID"),
     foreign key("personID") references "person"("personID"),
-    foreign key("username") references "user"("username")
+    foreign key("associatedUsername") references "user"("username")
 );
 
 create table authToken (

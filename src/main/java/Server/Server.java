@@ -1,14 +1,9 @@
 package Server;
-import DataAccess.DataAccessException;
-import DataAccess.Database;
-import DataAccess.UserDAO;
-import Models.User;
 import Server.Handler.*;
 import com.sun.net.httpserver.HttpServer;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.sql.Connection;
 
 public class Server {
     private static final int MAX_WAITING_CONNECTIONS = 10;
@@ -35,10 +30,12 @@ public class Server {
         server.createContext("/user/register", new RegisterHandler());
         server.createContext("/user/login", new LoginHandler());
         server.createContext("/clear", new ClearHandler());
-        server.createContext("/fill", new FillHandler());
+        server.createContext("/fill/", new FillHandler());
         server.createContext("/load", new LoadHandler());
         server.createContext("/person", new PersonHandler());
+        server.createContext("/person/", new GetPersonHandler());
         server.createContext("/event", new EventHandler());
+        server.createContext("/event/", new GetEventHandler());
 
         server.start();
         System.out.println("FamilyMapServer listening on port " + portNum);

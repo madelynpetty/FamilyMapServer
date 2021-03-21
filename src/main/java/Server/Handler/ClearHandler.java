@@ -21,30 +21,33 @@ public class ClearHandler implements HttpHandler {
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
-            ClearService clearService = new ClearService();
+            if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
+                ClearService clearService = new ClearService();
 
-            clearService.callClearService();
-            ClearResult clearResult = new ClearResult(clearService.getMessage(), clearService.getSuccess());
-//            String response = "{\n\"message\": " + clearService.getMessage() + "\n\"success\":" + clearService.getSuccess() + "\n}";
+                clearService.callClearService();
+                ClearResult clearResult = new ClearResult(clearService.getMessage(), clearService.getSuccess());
+                //            String response = "{\n\"message\": " + clearService.getMessage() + "\n\"success\":" + clearService.getSuccess() + "\n}";
 
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-            Gson gson = new Gson();
-            String response = gson.toJson(clearResult);
-            OutputStream outputStream = exchange.getResponseBody();
-            StringUtil.writeStringToStream(response, outputStream);
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                Gson gson = new Gson();
+                String response = gson.toJson(clearResult);
+                OutputStream outputStream = exchange.getResponseBody();
+                StringUtil.writeStringToStream(response, outputStream);
 
-            outputStream.close();
+                outputStream.close();
+            }
+            else {
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, 0);
+            }
         }
         catch (Exception e) {
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
             ClearResult clearResult = new ClearResult(e.getMessage(), false);
             String response = gson.toJson(clearResult);
             OutputStream outputStream = exchange.getResponseBody();
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
-
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
-//            throw new IOException(e.getMessage());
         }
     }
 

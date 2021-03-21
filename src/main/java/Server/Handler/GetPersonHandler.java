@@ -3,9 +3,8 @@ package Server.Handler;
 import DataAccess.AuthTokenDAO;
 import DataAccess.Database;
 import Models.AuthToken;
-import Services.Request.EventRequest;
-import Services.Result.EventListResult;
-import Services.Service.EventService;
+import Services.Result.PersonResult;
+import Services.Service.PersonService;
 import Utils.StringUtil;
 import com.google.gson.Gson;
 import com.sun.net.httpserver.Headers;
@@ -17,14 +16,17 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.sql.Connection;
 
-public class EventHandler implements HttpHandler {
+public class GetPersonHandler implements HttpHandler {
+
+    //for /person/[personID]
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
             if (exchange.getRequestMethod().toUpperCase().equals("GET")) {
 
-                EventService eventService = new EventService();
-                String json = StringUtil.getStringFromInputStream(exchange.getRequestBody());
+                PersonService personService = new PersonService();
+
+                String personID = exchange.getRequestURI().toString().substring(8);
 
                 String token = "";
                 Headers reqHeaders = exchange.getRequestHeaders();
@@ -37,7 +39,7 @@ public class EventHandler implements HttpHandler {
                     database = new Database();
                     conn = database.openConnection();
                 } catch (Exception e) {
-                    throw new Exception("Error: cannot get a connection to the database.");
+                    throw new Exception("cannot get a connection to the database.");
                 }
 
                 if (reqHeaders.containsKey("Authorization")) {
@@ -46,18 +48,17 @@ public class EventHandler implements HttpHandler {
                         authTokenDAO = new AuthTokenDAO(conn);
                         authToken = authTokenDAO.find(token);
                     } catch (Exception e) {
-                        throw new Exception("Error: Invalid Authorization token (you may not be logged in)");
+                        throw new Exception("Invalid Authorization token (you may not be logged in)");
                     }
                 } else {
-                    throw new Exception("Error: Authorization token missing.");
+                    throw new Exception("Authorization token missing.");
                 }
 
                 Gson gson = new Gson();
-                EventRequest eventRequest = gson.fromJson(json, EventRequest.class); //get json from request
-                EventListResult eventListResult = eventService.callEventService(eventRequest, authToken);
+                PersonResult personResult = personService.findPersonWithMatchingPersonID(personID);
 
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-                String response = gson.toJson(eventListResult);
+                String response = gson.toJson(personResult);
                 OutputStream outputStream = exchange.getResponseBody();
                 StringUtil.writeStringToStream(response, outputStream);
                 outputStream.close();
@@ -69,8 +70,8 @@ public class EventHandler implements HttpHandler {
         catch (Exception e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
-            EventListResult eventListResult = new EventListResult(e.getMessage(), false);
-            String response = gson.toJson(eventListResult);
+            PersonResult personResult = new PersonResult(e.getMessage(), false);
+            String response = gson.toJson(personResult);
             OutputStream outputStream = exchange.getResponseBody();
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();

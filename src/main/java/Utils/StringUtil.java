@@ -104,12 +104,11 @@ public class StringUtil {
                 conn.close();
             }
         }
-
         return authTokenID;
     }
 
     private static String getRandomID() {
-        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz!@#$%^&*~";
+        String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz";
         StringBuilder salt = new StringBuilder();
         Random rnd = new Random();
         while (salt.length() < 8) { // length of the random string.

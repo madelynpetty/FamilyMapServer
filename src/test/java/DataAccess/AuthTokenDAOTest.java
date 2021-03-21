@@ -5,6 +5,8 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.sql.Connection;
+import java.sql.SQLException;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 //We will use this to test that our insert method is working and failing in the right ways
@@ -15,18 +17,24 @@ public class AuthTokenDAOTest {
     private AuthTokenDAO atDao;
 
     @BeforeEach
-    public void setUp() throws DataAccessException {
-        //here we can set up any classes or variables we will need for the rest of our tests
-        //lets create a new database
-        db = new Database();
-        //and a new event with random data
-        bestAuthToken = new AuthToken("Gale", "Gale123A");
-        //Here, we'll open the connection in preparation for the test case to use it
-        Connection conn = db.getConnection();
-        //Let's clear the database as well so any lingering data doesn't affect our tests
-        db.clearTables();
-        //Then we pass that connection to the EventDAO so it can access the database
-        atDao = new AuthTokenDAO(conn);
+    public void setUp() throws Exception {
+        try {
+            //here we can set up any classes or variables we will need for the rest of our tests
+            //lets create a new database
+            db = new Database();
+            //and a new event with random data
+            bestAuthToken = new AuthToken("Gale", "Gale123A");
+            //Here, we'll open the connection in preparation for the test case to use it
+            Connection conn = db.getConnection();
+            //Let's clear the database as well so any lingering data doesn't affect our tests
+            UserDAO userDAO = new UserDAO(conn);
+            userDAO.clear();
+            //Then we pass that connection to the EventDAO so it can access the database
+            atDao = new AuthTokenDAO(conn);
+        }
+        catch (Exception e) {
+            throw new Exception("cannot set up AuthTokenTest");
+        }
     }
 
     @AfterEach
