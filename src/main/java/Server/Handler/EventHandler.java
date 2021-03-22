@@ -4,6 +4,7 @@ import DataAccess.AuthTokenDAO;
 import DataAccess.Database;
 import Models.AuthToken;
 import Services.Request.EventRequest;
+import Services.Result.ErrorResult;
 import Services.Result.EventListResult;
 import Services.Service.EventService;
 import Utils.StringUtil;
@@ -54,11 +55,11 @@ public class EventHandler implements HttpHandler {
 
                 Gson gson = new Gson();
                 EventRequest eventRequest = gson.fromJson(json, EventRequest.class); //get json from request
-                EventListResult eventListResult = eventService.callEventService(eventRequest, authToken);
-
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                EventListResult eventListResult = eventService.callEventService(authToken);
                 String response = gson.toJson(eventListResult);
                 OutputStream outputStream = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+
                 StringUtil.writeStringToStream(response, outputStream);
                 outputStream.close();
             }
@@ -67,11 +68,12 @@ public class EventHandler implements HttpHandler {
             }
         }
         catch (Exception e) {
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
-            EventListResult eventListResult = new EventListResult(e.getMessage(), false);
-            String response = gson.toJson(eventListResult);
+            ErrorResult errorResult = new ErrorResult(e.getMessage());
+            String response = gson.toJson(errorResult);
             OutputStream outputStream = exchange.getResponseBody();
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
         }

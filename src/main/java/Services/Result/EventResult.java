@@ -4,7 +4,6 @@ package Services.Result;
  * The response based on the success of the service
  */
 public class EventResult {
-    private String message;
     private String associatedUsername;
     private String eventID;
     private String personID;
@@ -15,11 +14,6 @@ public class EventResult {
     private String eventType;
     private int year;
     private boolean success = false;
-
-    public EventResult(String message) {
-        this.message = message;
-        success = false;
-    }
 
     public EventResult(String associatedUsername, String eventID, String personID, float latitude,
                        float longitude, String country, String city, String eventType, int year) {
@@ -33,11 +27,6 @@ public class EventResult {
         this.eventType = eventType;
         this.year = year;
         success = true;
-    }
-
-
-    public String getMessage() {
-        return message;
     }
 
     @Override

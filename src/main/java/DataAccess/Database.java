@@ -1,9 +1,6 @@
 package DataAccess;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class Database {
     private Connection conn;
@@ -63,19 +60,6 @@ public class Database {
         }
     }
 
-    public void clearTables() throws DataAccessException {
-        try (Statement stmt = conn.createStatement()) {
-            String sql = "DELETE FROM event";
-            stmt.executeUpdate(sql);
-            sql = "DELETE FROM user";
-            stmt.executeUpdate(sql);
-            sql = "DELETE FROM person";
-            stmt.executeUpdate(sql);
-            sql = "DELETE FROM authToken";
-            stmt.executeUpdate(sql);
-        } catch (SQLException e) {
-            throw new DataAccessException("SQL Error encountered while clearing tables");
-        }
-    }
+
 }
 

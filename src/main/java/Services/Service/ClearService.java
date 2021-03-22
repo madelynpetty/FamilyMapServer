@@ -1,8 +1,6 @@
 package Services.Service;
-import DataAccess.DataAccessException;
 import DataAccess.Database;
-import DataAccess.UserDAO;
-import Models.User;
+import DataAccess.DatabaseDAO;
 import Services.Result.ClearResult;
 
 import java.sql.Connection;
@@ -11,16 +9,19 @@ import java.sql.Connection;
  * The ClearService makes the request and returns the result
  */
 public class ClearService {
-    private Database database = new Database();
 
     /**
      * Returns the result of calling the Clear Service
      */
     public ClearResult callClearService() throws Exception {
         ClearResult clearResult;
+        Database database = null;
+
         try {
-            Connection conn = database.getConnection();
-            database.clearTables();
+            database = new Database();
+            Connection conn = database.openConnection();
+            DatabaseDAO databaseDAO = new DatabaseDAO(conn);
+            databaseDAO.clearTables();
 
             clearResult = new ClearResult("Clear succeeded.", true);
         }
@@ -30,8 +31,7 @@ public class ClearService {
         finally {
             try {
                 database.closeConnection(true);
-            }
-            catch (Exception e){
+            } catch (Exception e) {
                 throw new Exception("Error: Could not close database");
             }
         }

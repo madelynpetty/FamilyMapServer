@@ -25,9 +25,9 @@ public class LoadHandler implements HttpHandler {
                 LoadRequest loadRequest = gson.fromJson(json, LoadRequest.class); //get json from request
                 LoadResult loadResult = loadService.callLoadService(loadRequest);
 
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 String response = gson.toJson(loadResult);
                 OutputStream outputStream = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 StringUtil.writeStringToStream(response, outputStream);
                 outputStream.close();
             }
@@ -36,11 +36,11 @@ public class LoadHandler implements HttpHandler {
             }
         }
         catch (Exception e) {
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
             LoadResult loadResult = new LoadResult(e.getMessage(), false);
             String response = gson.toJson(loadResult);
             OutputStream outputStream = exchange.getResponseBody();
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
         }

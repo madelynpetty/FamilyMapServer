@@ -8,24 +8,13 @@ import java.util.ArrayList;
  * The response based on the success of the service
  */
 public class EventListResult {
-    private String message;
-    private ArrayList<Event> events = new ArrayList<>();
+    private ArrayList<Event> data = new ArrayList<>();
     private boolean success = false;
 
-    public EventListResult(String message, boolean success) {
-        this.message = message;
+    public EventListResult(ArrayList<Event> data, boolean success) {
+        this.data = data;
         this.success = success;
     }
-
-    public EventListResult(ArrayList<Event> events, boolean success) {
-        this.events = events;
-        this.success = success;
-    }
-
-    public String getMessage() {
-        return message;
-    }
-
 
     @Override
     public boolean equals(Object o) {
@@ -33,7 +22,7 @@ public class EventListResult {
             return false;
         if (o instanceof EventListResult) {
             EventListResult eventListResult = (EventListResult) o;
-            return eventListResult.events.equals(events) &&
+            return eventListResult.data.equals(data) &&
                     eventListResult.success == (success);
         } else {
             return false;

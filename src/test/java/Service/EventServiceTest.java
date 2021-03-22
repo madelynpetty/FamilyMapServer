@@ -1,9 +1,6 @@
 package Service;
 
-import DataAccess.AuthTokenDAO;
-import DataAccess.DataAccessException;
-import DataAccess.Database;
-import DataAccess.EventDAO;
+import DataAccess.*;
 import Models.AuthToken;
 import Models.Event;
 import Services.Result.EventListResult;
@@ -43,7 +40,8 @@ public class EventServiceTest {
             throw new Exception("Could not connect to the database");
         }
 
-        database.clearTables();
+        DatabaseDAO databaseDAO = new DatabaseDAO(conn);
+        databaseDAO.clearTables();
 
         eventDAO = new EventDAO(conn);
         eventService = new EventService();
@@ -69,7 +67,7 @@ public class EventServiceTest {
         AuthToken authToken = new AuthToken("Gale", "12345678");
         authTokenDAO.insert(authToken);
 
-        EventListResult compareTest = eventService.callEventService(null, authToken);
+        EventListResult compareTest = eventService.callEventService(authToken);
 
         assertEquals(eventListResult, compareTest);
     }
@@ -80,7 +78,7 @@ public class EventServiceTest {
     }
 
     @Test
-    public void getEventPass() throws DataAccessException {
+    public void getEventPass() throws Exception {
         eventDAO.insert(mockEvent);
 
         String eventID = "Biking_123A";

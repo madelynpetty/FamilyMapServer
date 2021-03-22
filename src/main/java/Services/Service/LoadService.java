@@ -25,13 +25,17 @@ public class LoadService {
         System.out.println("Called callLoadService");
         Database database = new Database();
         LoadResult loadResult;
+        Connection conn = null;
+        boolean doCommit = false;
+
         try {
-            Connection conn = database.getConnection();
+            conn = database.openConnection();
             UserDAO userDAO = new UserDAO(conn);
             PersonDAO personDAO = new PersonDAO(conn);
             EventDAO eventDAO = new EventDAO(conn);
+            DatabaseDAO databaseDAO = new DatabaseDAO(conn);
 
-            database.clearTables();
+            databaseDAO.clearTables();
 
             for (int i = 0; i < request.getUsers().size(); i++) {
                 userDAO.insert(request.getUsers().get(i));
@@ -45,16 +49,17 @@ public class LoadService {
                 eventDAO.insert(request.getEvents().get(i));
             }
 
+            doCommit = true;
             loadResult = new LoadResult("Successfully added " + request.getUsers().size() +
                     " users, " + request.getPersons().size() + " persons, and " +
                     request.getEvents().size() + " events to the database.", true);
 
         } catch (DataAccessException e) {
+            doCommit = false;
             loadResult = new LoadResult("Error: could not connect to the database.", false);
-//            throw new Exception("Error: cannot get connection to database");
         } finally {
             try {
-                database.closeConnection(true);
+                database.closeConnection(doCommit);
             } catch (Exception e) {
                 throw new Exception("Error: could not load data");
             }

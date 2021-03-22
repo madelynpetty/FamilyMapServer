@@ -23,63 +23,58 @@ public class PersonService {
      */
 
     //FOR THE PATH /person/personID
-    public PersonResult findPersonWithMatchingPersonID(String personID) {
-        PersonResult personResult;
+    public PersonResult findPersonWithMatchingPersonID(String personID) throws Exception {
         try {
-            Connection conn = database.getConnection();
+            Connection conn = database.openConnection();
             PersonDAO personDAO = new PersonDAO(conn);
 
             Person person = personDAO.find(personID);
 
             if (person == null) {
-                System.out.println("Error: There is no matching person with personID " + personID + " in the database");
-                personResult = null;
+                throw new Exception("Error: There is no matching person with personID " + personID + " in the database");
             }
             else {
-                personResult = new PersonResult(person.getPersonID(), person.getAssociatedUsername(),
+                return new PersonResult(person.getPersonID(), person.getAssociatedUsername(),
                         person.getFirstName(), person.getLastName(), person.getGender(), person.getFatherID(),
                         person.getMotherID(), person.getSpouseID(), true);
             }
         }
         catch (Exception e) {
-            personResult = new PersonResult("Error: There are no people in the database that match the given personID of " + personID, false);
+            throw new Exception("Error: There are no people in the database that match the given personID of " + personID);
         }
         finally {
             try {
-                database.closeConnection(true);
+                database.closeConnection(false);
             }
             catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return personResult;
     }
 
     //for the path /person
-    public PersonListResult returnFamilyMembers(String providedAuthToken) {
-        PersonListResult personListResult;
+    public PersonListResult returnFamilyMembers(String providedAuthToken) throws Exception {
         ArrayList<Person> familyMembers;
         try {
-            Connection conn = database.getConnection();
+            Connection conn = database.openConnection();
             PersonDAO personDAO = new PersonDAO(conn);
             AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
 
             AuthToken authToken = authTokenDAO.find(providedAuthToken);
             familyMembers = personDAO.findFamilyMembersWithUsername(authToken.getUsername());
 
-            personListResult = new PersonListResult(familyMembers);
+            return new PersonListResult(familyMembers);
         }
         catch (Exception e) {
-            personListResult = new PersonListResult("Error: There are no family members in the database that match the given person");
+            throw new Exception("Error: There are no family members in the database that match the given person");
         }
         finally {
             try {
-                database.closeConnection(true);
+                database.closeConnection(false);
             }
             catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return personListResult;
     }
 }

@@ -21,10 +21,10 @@ public class ClearHandler implements HttpHandler {
 
                 ClearResult clearResult = clearService.callClearService();
 
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 Gson gson = new Gson();
                 String response = gson.toJson(clearResult);
                 OutputStream outputStream = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 StringUtil.writeStringToStream(response, outputStream);
 
                 outputStream.close();
@@ -32,11 +32,11 @@ public class ClearHandler implements HttpHandler {
                 throw new Exception("Error: Unable to clear");
             }
         } catch (Exception e) {
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
             ClearResult clearResult = new ClearResult(e.getMessage(), false);
             String response = gson.toJson(clearResult);
             OutputStream outputStream = exchange.getResponseBody();
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
         } finally {

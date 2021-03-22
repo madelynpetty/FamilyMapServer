@@ -1,5 +1,6 @@
 package Server.Handler;
 
+import Services.Result.ErrorResult;
 import Services.Result.LoginResult;
 import Utils.StringUtil;
 import Services.Request.LoginRequest;
@@ -25,9 +26,9 @@ public class LoginHandler implements HttpHandler {
                 LoginRequest loginRequest = gson.fromJson(json, LoginRequest.class); //get json from request
                 LoginResult loginResult = loginService.callLoginService(loginRequest);
 
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 String response = gson.toJson(loginResult);
                 OutputStream outputStream = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 StringUtil.writeStringToStream(response, outputStream);
                 outputStream.close();
 
@@ -38,11 +39,11 @@ public class LoginHandler implements HttpHandler {
             }
         }
         catch (Exception e) {
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
-            LoginResult loginResult = new LoginResult(e.getMessage());
-            String response = gson.toJson(loginResult);
+            ErrorResult errorResult = new ErrorResult(e.getMessage());
+            String response = gson.toJson(errorResult);
             OutputStream outputStream = exchange.getResponseBody();
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
         }

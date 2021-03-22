@@ -5,26 +5,16 @@ import Models.Person;
 import java.util.ArrayList;
 
 public class PersonListResult {
-    private ArrayList<Person> persons = new ArrayList<>();
+    private ArrayList<Person> data = new ArrayList<>();
     private boolean success = false;
-    private String message;
 
     /**
      * Constructor to use for /person success
-     * @param persons
+     * @param data
      */
-    public PersonListResult(ArrayList<Person> persons) {
-        this.persons = persons;
+    public PersonListResult(ArrayList<Person> data) {
+        this.data = data;
         success = true;
-    }
-
-    /**
-     * Constructor to use for /person/[personID] error and
-     * @param message
-     */
-    public PersonListResult(String message) {
-        this.message = message;
-        success = false;
     }
 
     @Override
@@ -33,9 +23,8 @@ public class PersonListResult {
             return false;
         if (o instanceof PersonListResult) {
             PersonListResult personListResult = (PersonListResult) o;
-            return personListResult.persons.equals(persons) &&
-                    personListResult.success == (success) &&
-                    personListResult.message.equals(message);
+            return personListResult.data.equals(data) &&
+                    personListResult.success == (success);
         } else {
             return false;
         }

@@ -4,6 +4,7 @@ import DataAccess.AuthTokenDAO;
 import DataAccess.Database;
 import Models.AuthToken;
 import Services.Request.PersonRequest;
+import Services.Result.ErrorResult;
 import Services.Result.PersonListResult;
 import Services.Service.PersonService;
 import Utils.StringUtil;
@@ -57,10 +58,11 @@ public class PersonHandler implements HttpHandler {
                 Gson gson = new Gson();
                 PersonListResult personListResult = null;
 
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 personListResult = personService.returnFamilyMembers(authToken.getAuthToken());
                 String response = gson.toJson(personListResult);
                 OutputStream outputStream = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+
                 StringUtil.writeStringToStream(response, outputStream);
                 outputStream.close();
             }
@@ -69,12 +71,12 @@ public class PersonHandler implements HttpHandler {
             }
         }
         catch (Exception e) {
+            Gson gson = new Gson();
+            ErrorResult errorResult = new ErrorResult(e.getMessage());
+            String response = gson.toJson(errorResult);
+            OutputStream outputStream = exchange.getResponseBody();
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
-            Gson gson = new Gson();
-            PersonListResult personListResult = new PersonListResult(e.getMessage());
-            String response = gson.toJson(personListResult);
-            OutputStream outputStream = exchange.getResponseBody();
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
         }

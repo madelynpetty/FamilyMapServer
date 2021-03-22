@@ -71,13 +71,12 @@ public class FillHandler implements HttpHandler {
 
                 fillRequest = new FillRequest(username, generationInt);
 
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-
                 Gson gson = new Gson();
                 fillService = new FillService();
                 FillResult fillResult = fillService.callFillService(fillRequest);
                 String response = gson.toJson(fillResult);
                 OutputStream outputStream = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 StringUtil.writeStringToStream(response, outputStream);
                 outputStream.close();
             }
@@ -86,11 +85,11 @@ public class FillHandler implements HttpHandler {
             }
         }
         catch(Exception e) {
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
             FillResult fillResult = new FillResult(e.getMessage(), false);
             String response = gson.toJson(fillResult);
             OutputStream outputStream = exchange.getResponseBody();
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
         }

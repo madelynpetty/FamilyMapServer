@@ -1,5 +1,6 @@
 package Server.Handler;
 
+import Services.Result.ErrorResult;
 import Services.Result.RegisterResult;
 import Utils.StringUtil;
 import Services.Request.RegisterRequest;
@@ -27,9 +28,9 @@ public class RegisterHandler implements HttpHandler {
                 RegisterRequest registerRequest = gson.fromJson(json, RegisterRequest.class); //get json from request
                 RegisterResult registerResult = registerService.callRegisterService(registerRequest);
 
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 String response = gson.toJson(registerResult);
                 OutputStream outputStream = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 StringUtil.writeStringToStream(response, outputStream);
                 outputStream.close();
             }
@@ -38,12 +39,12 @@ public class RegisterHandler implements HttpHandler {
             }
         }
         catch (Exception e) {
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
 
             Gson gson = new Gson();
-            RegisterResult registerResult = new RegisterResult(e.getMessage());
-            String response = gson.toJson(registerResult);
+            ErrorResult errorResult = new ErrorResult(e.getMessage());
+            String response = gson.toJson(errorResult);
             OutputStream outputStream = exchange.getResponseBody();
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
         }

@@ -21,11 +21,6 @@ public class PersonDAOTest {
     private Person bestPerson;
     private PersonDAO pDao;
 
-//    @BeforeAll
-//    static void fillDatabase() throws Exception {
-//        RandomDataUtils.addRandomDataForClearing();
-//    }
-
     @BeforeEach
     public void setUp() throws Exception {
         //here we can set up any classes or variables we will need for the rest of our tests
@@ -37,7 +32,8 @@ public class PersonDAOTest {
         //Here, we'll open the connection in preparation for the test case to use it
         Connection conn = db.getConnection();
         //Let's clear the database as well so any lingering data doesn't affect our tests
-        db.clearTables();
+        DatabaseDAO databaseDAO = new DatabaseDAO(conn);
+        databaseDAO.clearTables();
         //Then we pass that connection to the personDAO so it can access the database
         pDao = new PersonDAO(conn);
     }

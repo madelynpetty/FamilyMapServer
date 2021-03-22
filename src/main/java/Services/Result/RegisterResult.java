@@ -9,23 +9,11 @@ public class RegisterResult {
     public String personID;
     public String username;
 
-    public String message;
-
-    public RegisterResult(String message) {
-        success = false;
-        this.message = message;
-    }
-
     public RegisterResult(String authtoken, String username, String personID) {
-        message = null;
         success = true;
         this.personID = personID;
         this.username = username;
         this.authtoken = authtoken;
-    }
-
-    public String getMessage() {
-        return message;
     }
 
     @Override

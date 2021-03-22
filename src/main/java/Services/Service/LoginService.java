@@ -18,7 +18,6 @@ public class LoginService {
     public LoginService() {
 
     }
-    private LoginResult loginResult = null;
     Database database = new Database();
 
     /**
@@ -27,41 +26,43 @@ public class LoginService {
      * @return The result of calling the login service
      */
     public LoginResult callLoginService(LoginRequest request) throws Exception {
-        System.out.println("Called callLoginService");
+        Connection conn = null;
+        boolean doCommit = false;
         try {
-            Connection conn = database.getConnection();
+            conn = database.openConnection();
 
             UserDAO userDAO = new UserDAO(conn);
             User user = userDAO.login(request.getUsername(), request.getPassword());
 
             if (user == null) {
-                loginResult = new LoginResult("Error: Invalid username/password combination");
+                throw new Exception("Error: Invalid username/password combination");
             }
             else {
-                //create authToken here for logged in user
+
                 AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
                 String authTokenID = StringUtil.getRandomAuthToken();
                 AuthToken authToken = new AuthToken(request.getUsername(), authTokenID);
                 authTokenDAO.insert(authToken);
 
-                loginResult = new LoginResult(authToken.getAuthToken(), user.getUsername(), user.getPersonID());
+                doCommit = true;
+                return new LoginResult(authToken.getAuthToken(), user.getUsername(), user.getPersonID());
             }
         }
         catch (DataAccessException e) {
+            doCommit = false;
             throw new Exception("Error: cannot get connection to database");
         }
         catch (Exception e) {
+            doCommit = false;
             throw e;
         }
         finally {
             try {
-                database.closeConnection(true);
+                database.closeConnection(doCommit);
             }
             catch (Exception e){
                 e.printStackTrace();
             }
         }
-
-        return loginResult;
     }
 }

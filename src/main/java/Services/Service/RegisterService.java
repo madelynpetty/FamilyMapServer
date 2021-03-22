@@ -25,8 +25,10 @@ public class RegisterService {
     public RegisterResult callRegisterService(RegisterRequest request) throws Exception {
         Connection conn = null;
         RegisterResult registerResult;
+        boolean doCommit = false;
+
         try {
-            conn = database.getConnection();
+            conn = database.openConnection();
             UserDAO userDAO = new UserDAO(conn);
 
             String personID = StringUtil.getRandomPersonID();
@@ -40,30 +42,32 @@ public class RegisterService {
             AuthToken authToken = new AuthToken(request.getUsername(), authTokenID);
             authTokenDAO.insert(authToken);
 
+            doCommit = true;
             registerResult = new RegisterResult(authTokenID, user.getUsername(), user.getPersonID());
-
-            if (conn != null) {
-                database.closeConnection(true);
-            }
-            //now call fill service
-            FillRequest fillRequest = new FillRequest(request.getUsername(), 4);
-            FillService fillService = new FillService();
-            fillService.callFillService(fillRequest);
-
-            return registerResult;
         }
         catch (Exception e) {
+            doCommit = false;
             throw new Exception("Error: Could not register user.");
         }
         finally {
             try {
-                if (conn != null && !conn.isClosed()) {
-                    database.closeConnection(true);
-                }
+                database.closeConnection(doCommit);
             }
             catch (Exception e){
-                e.printStackTrace();
+                throw new Exception("Could not close the register connection before fill");
             }
         }
+
+        try {
+            //now call fill service
+            FillRequest fillRequest = new FillRequest(request.getUsername(), 4);
+            FillService fillService = new FillService();
+            fillService.callFillService(fillRequest);
+        }
+        catch (Exception e) {
+            throw new Exception("Error: Could not complete fill service");
+        }
+
+        return registerResult;
     }
 }

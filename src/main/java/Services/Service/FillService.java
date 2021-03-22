@@ -30,7 +30,7 @@ public class FillService {
         Connection conn = null;
 
         try {
-            conn = database.getConnection();
+            conn = database.openConnection();
             UserDAO userDAO = new UserDAO(conn);
             User user = userDAO.find(request.getUsername());
 

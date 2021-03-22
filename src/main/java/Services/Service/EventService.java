@@ -19,21 +19,19 @@ public class EventService {
     //event
     /**
      * Returns the result of calling the Event Service
-     * @param request The event request
      * @return The result of calling the event service
      */
-    public EventListResult callEventService(EventRequest request, AuthToken authToken) {
-        EventListResult eventListResult = null;
+    public EventListResult callEventService(AuthToken authToken) throws Exception {
         try {
-            Connection conn = database.getConnection();
+            Connection conn = database.openConnection();
 
             EventDAO eventDAO = new EventDAO(conn);
             ArrayList<Event> events = eventDAO.findByUsername(authToken.getUsername());
 
-            eventListResult = new EventListResult(events, true);
+            return new EventListResult(events, true);
         }
         catch (Exception e) {
-            eventListResult = new EventListResult("Error: Could not retrieve events for the family members of the current user.", false);
+            throw new Exception("Error: Could not retrieve events for the family members of the current user.");
         }
         finally {
             try {
@@ -43,34 +41,29 @@ public class EventService {
                 e.printStackTrace();
             }
         }
-
-        return eventListResult;
     }
 
-    public EventResult getEvent(String eventID) {
-        EventResult eventResult = null;
+    public EventResult getEvent(String eventID) throws Exception {
         try {
-            Connection conn = database.getConnection();
+            Connection conn = database.openConnection();
 
             EventDAO eventDAO = new EventDAO(conn);
             Event event = eventDAO.find(eventID);
 
-            eventResult = new EventResult(event.getAssociatedUsername(), event.getEventID(), event.getPersonID(),
+            return new EventResult(event.getAssociatedUsername(), event.getEventID(), event.getPersonID(),
                     event.getLatitude(), event.getLongitude(), event.getCountry(), event.getCity(), event.getEventType(),
                     event.getYear());
         }
         catch (Exception e) {
-            eventResult = new EventResult("Error: Could not retrieve event.");
+            throw new Exception("Error: Could not retrieve event.");
         }
         finally {
             try {
-                database.closeConnection(true);
+                database.closeConnection(false);
             }
             catch (Exception e){
                 e.printStackTrace();
             }
         }
-
-        return eventResult;
     }
 }

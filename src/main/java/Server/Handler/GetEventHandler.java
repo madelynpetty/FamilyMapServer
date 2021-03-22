@@ -3,7 +3,7 @@ package Server.Handler;
 import DataAccess.AuthTokenDAO;
 import DataAccess.Database;
 import Models.AuthToken;
-import Services.Result.EventListResult;
+import Services.Result.ErrorResult;
 import Services.Result.EventResult;
 import Services.Service.EventService;
 import Utils.StringUtil;
@@ -38,7 +38,6 @@ public class GetEventHandler implements HttpHandler {
                 try {
                     database = new Database();
                     conn = database.openConnection();
-                    authTokenDAO = new AuthTokenDAO(conn);
                 } catch (Exception e) {
                     throw new Exception("cannot get a connection to the database.");
                 }
@@ -46,6 +45,7 @@ public class GetEventHandler implements HttpHandler {
                 if (reqHeaders.containsKey("Authorization")) {
                     token = reqHeaders.getFirst("Authorization");
                     try {
+                        authTokenDAO = new AuthTokenDAO(conn);
                         authToken = authTokenDAO.find(token);
                     } catch (Exception e) {
                         throw new Exception("Error: Invalid Authorization token (you may not be logged in)");
@@ -57,9 +57,9 @@ public class GetEventHandler implements HttpHandler {
                 Gson gson = new Gson();
                 EventResult eventResult = eventService.getEvent(eventID);
 
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 String response = gson.toJson(eventResult);
                 OutputStream outputStream = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 StringUtil.writeStringToStream(response, outputStream);
                 outputStream.close();
             } else {
@@ -67,11 +67,11 @@ public class GetEventHandler implements HttpHandler {
             }
         }
         catch (Exception e) {
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
-            EventResult eventResult = new EventResult(e.getMessage());
-            String response = gson.toJson(eventResult);
+            ErrorResult errorResult = new ErrorResult(e.getMessage());
+            String response = gson.toJson(errorResult);
             OutputStream outputStream = exchange.getResponseBody();
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
         }

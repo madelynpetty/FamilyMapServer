@@ -17,11 +17,6 @@ public class AuthTokenDAOTest {
     private AuthToken bestAuthToken;
     private AuthTokenDAO atDao;
 
-//    @BeforeAll
-//    static void fillDatabase() throws Exception {
-//        RandomDataUtils.addRandomDataForClearing();
-//    }
-
     @BeforeEach
     public void setUp() throws Exception {
         try {
@@ -33,9 +28,10 @@ public class AuthTokenDAOTest {
             //Here, we'll open the connection in preparation for the test case to use it
             Connection conn = db.getConnection();
             UserDAO userDAO = new UserDAO(conn);
+            DatabaseDAO databaseDAO = new DatabaseDAO(conn);
 
             //Let's clear the database as well so any lingering data doesn't affect our tests
-            db.clearTables();
+            databaseDAO.clearTables();
             //Then we pass that connection to the EventDAO so it can access the database
             atDao = new AuthTokenDAO(conn);
         }
