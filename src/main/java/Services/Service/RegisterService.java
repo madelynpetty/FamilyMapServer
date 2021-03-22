@@ -31,14 +31,14 @@ public class RegisterService {
             conn = database.openConnection();
             UserDAO userDAO = new UserDAO(conn);
 
-            String personID = StringUtil.getRandomPersonID();
+            String personID = StringUtil.getRandomPersonID(conn);
             User user = new User(request.getUsername(), request.getPassword(), request.getEmail(),
                     request.getFirstName(), request.getLastName(), request.getGender(), personID);
             userDAO.insert(user);
 
             //logging in, so we create an authToken here
             AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
-            String authTokenID = StringUtil.getRandomAuthToken();
+            String authTokenID = StringUtil.getRandomAuthToken(conn);
             AuthToken authToken = new AuthToken(request.getUsername(), authTokenID);
             authTokenDAO.insert(authToken);
 

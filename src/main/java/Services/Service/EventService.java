@@ -1,4 +1,5 @@
 package Services.Service;
+import DataAccess.AuthTokenDAO;
 import DataAccess.Database;
 import DataAccess.EventDAO;
 import Models.AuthToken;
@@ -21,12 +22,19 @@ public class EventService {
      * Returns the result of calling the Event Service
      * @return The result of calling the event service
      */
-    public EventListResult callEventService(AuthToken authToken) throws Exception {
+    public EventListResult callEventService(String authToken) throws Exception {
         try {
             Connection conn = database.openConnection();
 
             EventDAO eventDAO = new EventDAO(conn);
-            ArrayList<Event> events = eventDAO.findByUsername(authToken.getUsername());
+            AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
+            AuthToken authToken1 = authTokenDAO.find(authToken);
+
+            if (authToken1 == null) {
+                throw new Exception("Error: could not find authtoken in the database");
+            }
+
+            ArrayList<Event> events = eventDAO.findByUsername(authToken1.getUsername());
 
             return new EventListResult(events, true);
         }
@@ -49,6 +57,10 @@ public class EventService {
 
             EventDAO eventDAO = new EventDAO(conn);
             Event event = eventDAO.find(eventID);
+
+            if (event == null) {
+                throw new Exception("Error: Could not find event.");
+            }
 
             return new EventResult(event.getAssociatedUsername(), event.getEventID(), event.getPersonID(),
                     event.getLatitude(), event.getLongitude(), event.getCountry(), event.getCity(), event.getEventType(),

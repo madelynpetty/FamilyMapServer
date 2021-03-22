@@ -5,7 +5,7 @@ import Models.Person;
 import java.util.ArrayList;
 
 public class PersonListResult {
-    private ArrayList<Person> data = new ArrayList<>();
+    private ArrayList<Person> data;
     private boolean success = false;
 
     /**

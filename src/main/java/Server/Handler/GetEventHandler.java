@@ -15,6 +15,7 @@ import com.sun.net.httpserver.HttpHandler;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
+import java.rmi.server.ExportException;
 import java.sql.Connection;
 
 public class GetEventHandler implements HttpHandler {
@@ -47,6 +48,9 @@ public class GetEventHandler implements HttpHandler {
                     try {
                         authTokenDAO = new AuthTokenDAO(conn);
                         authToken = authTokenDAO.find(token);
+                        if (authToken == null) {
+                            throw new Exception("Error: cannot find authtoken in the database");
+                        }
                     } catch (Exception e) {
                         throw new Exception("Error: Invalid Authorization token (you may not be logged in)");
                     }

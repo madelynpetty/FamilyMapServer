@@ -48,6 +48,9 @@ public class GetPersonHandler implements HttpHandler {
                     try {
                         authTokenDAO = new AuthTokenDAO(conn);
                         authToken = authTokenDAO.find(token);
+                        if (authToken == null) {
+                            throw new Exception("Error: No matching authtoken in the database");
+                        }
                     } catch (Exception e) {
                         throw new Exception("Error: Invalid Authorization token (you may not be logged in)");
                     }

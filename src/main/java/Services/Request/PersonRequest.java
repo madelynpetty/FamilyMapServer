@@ -1,21 +1,18 @@
 package Services.Request;
 
-import Models.Person;
-
 /**
  * Takes the request and turns it into a Java object
  */
 public class PersonRequest {
-    private Person[] persons;
+    private String associatedUsername;
     private String personID;
-    private String username;
     private String firstName;
     private String lastName;
     private String gender;
     private String fatherID;
     private String motherID;
     private String spouseID;
-    private boolean success = false;
+//    private boolean success = false;
 
     public String getPersonID() {
         return personID;
@@ -25,12 +22,12 @@ public class PersonRequest {
         this.personID = personID;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAssociatedUsername() {
+        return associatedUsername;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAssociatedUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
     public String getFirstName() {
@@ -81,11 +78,11 @@ public class PersonRequest {
         this.spouseID = spouseID;
     }
 
-    public boolean isSuccess() {
-        return success;
-    }
-
-    public void setSuccess(boolean success) {
-        this.success = success;
-    }
+//    public boolean isSuccess() {
+//        return success;
+//    }
+//
+//    public void setSuccess(boolean success) {
+//        this.success = success;
+//    }
 }

@@ -1,14 +1,7 @@
 package Utils;
-
-import DataAccess.*;
-import Models.AuthToken;
-import Models.Event;
-import Models.Person;
-import Models.User;
 import com.google.gson.*;
 
 import java.io.*;
-import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;

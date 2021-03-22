@@ -61,6 +61,9 @@ public class PersonService {
             AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
 
             AuthToken authToken = authTokenDAO.find(providedAuthToken);
+            if (authToken == null) {
+                throw new Exception("Error: No matching authtoken in the database.");
+            }
             familyMembers = personDAO.findFamilyMembersWithUsername(authToken.getUsername());
 
             return new PersonListResult(familyMembers);

@@ -6,8 +6,7 @@ create table user (
     lastName string not null,
     gender string not null,
     personID string not null,
-    primary key("username"),
-    foreign key("personID") references"person"("personID")
+    primary key("username")
 );
 
 create table person (
@@ -19,8 +18,7 @@ create table person (
     fatherID string,
     motherID string,
     spouseID string,
-    primary key("personID"),
-    foreign key("associatedUsername") references "user"("username")
+    primary key("personID")
 );
 
 create table event (
@@ -33,14 +31,11 @@ create table event (
     city string not null,
     eventType string not null,
     year int not null,
-    primary key("eventID"),
-    foreign key("personID") references "person"("personID"),
-    foreign key("associatedUsername") references "user"("username")
+    primary key("eventID")
 );
 
 create table authToken (
     username string not null,
     token string not null unique,
-    primary key("token"),
-    foreign key("username") references "user"("username")
+    primary key("token")
 );

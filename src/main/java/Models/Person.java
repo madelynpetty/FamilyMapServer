@@ -16,6 +16,7 @@ public class Person {
     private String spouseID;
     private int generation;
     private int birthYear;
+    private int deathYear;
 
     /**
      * Creates a Person with the following objects: personID, username, firstName, lastName, gender, fatherID, motherID, spouseID
@@ -201,5 +202,13 @@ public class Person {
         } else {
             return false;
         }
+    }
+
+    public int getDeathYear() {
+        return deathYear;
+    }
+
+    public void setDeathYear(int deathYear) {
+        this.deathYear = deathYear;
     }
 }

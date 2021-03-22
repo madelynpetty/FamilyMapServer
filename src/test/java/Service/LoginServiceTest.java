@@ -1,7 +1,7 @@
 package Service;
 
-import DataAccess.DataAccessException;
 import DataAccess.Database;
+import DataAccess.DatabaseDAO;
 import DataAccess.UserDAO;
 import Models.User;
 import Services.Request.LoginRequest;
@@ -27,6 +27,11 @@ public class LoginServiceTest {
         try {
             database = new Database();
             connection = database.getConnection();
+
+            DatabaseDAO databaseDAO = new DatabaseDAO(connection);
+            databaseDAO.clearTables();
+            connection.commit();
+
             userDAO = new UserDAO(connection);
         }
         catch (Exception e) {
@@ -36,12 +41,14 @@ public class LoginServiceTest {
 
     @Test
     public void testCallLoginServicePass() throws Exception {
-        LoginResult expectedResult = new LoginResult(null, "maddie", "mad12345");
         LoginRequest loginRequest = new LoginRequest("maddie", "pass123");
         userDAO.insert(new User("maddie", "pass123", "maddie@gmail.com",
                 "maddie", "petty", "f", "mad12345"));
 
+        connection.commit();
         LoginResult compareTest = loginService.callLoginService(loginRequest);
+        LoginResult expectedResult = new LoginResult(compareTest.authtoken, "maddie", "mad12345");
+
         assertEquals(expectedResult, compareTest);
     }
 

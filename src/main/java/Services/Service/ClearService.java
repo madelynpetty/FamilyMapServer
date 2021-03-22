@@ -16,6 +16,7 @@ public class ClearService {
     public ClearResult callClearService() throws Exception {
         ClearResult clearResult;
         Database database = null;
+        boolean doCommit = false;
 
         try {
             database = new Database();
@@ -23,14 +24,16 @@ public class ClearService {
             DatabaseDAO databaseDAO = new DatabaseDAO(conn);
             databaseDAO.clearTables();
 
+            doCommit = true;
             clearResult = new ClearResult("Clear succeeded.", true);
         }
         catch (Exception e) {
+            doCommit = false;
             clearResult = new ClearResult("Error: Could not clear the database", false);
         }
         finally {
             try {
-                database.closeConnection(true);
+                database.closeConnection(doCommit);
             } catch (Exception e) {
                 throw new Exception("Error: Could not close database");
             }

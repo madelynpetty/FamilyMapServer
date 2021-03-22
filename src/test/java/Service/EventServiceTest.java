@@ -67,7 +67,7 @@ public class EventServiceTest {
         AuthToken authToken = new AuthToken("Gale", "12345678");
         authTokenDAO.insert(authToken);
 
-        EventListResult compareTest = eventService.callEventService(authToken);
+        EventListResult compareTest = eventService.callEventService(authToken.getAuthToken());
 
         assertEquals(eventListResult, compareTest);
     }

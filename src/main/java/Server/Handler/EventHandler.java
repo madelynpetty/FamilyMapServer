@@ -13,6 +13,7 @@ import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpHandler;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -46,6 +47,9 @@ public class EventHandler implements HttpHandler {
                     try {
                         authTokenDAO = new AuthTokenDAO(conn);
                         authToken = authTokenDAO.find(token);
+                        if (authToken == null) {
+                            throw new Exception("Error: No matching authtoken in the database");
+                        }
                     } catch (Exception e) {
                         throw new Exception("Error: Invalid Authorization token (you may not be logged in)");
                     }
@@ -55,7 +59,7 @@ public class EventHandler implements HttpHandler {
 
                 Gson gson = new Gson();
                 EventRequest eventRequest = gson.fromJson(json, EventRequest.class); //get json from request
-                EventListResult eventListResult = eventService.callEventService(authToken);
+                EventListResult eventListResult = eventService.callEventService(authToken.getAuthToken());
                 String response = gson.toJson(eventListResult);
                 OutputStream outputStream = exchange.getResponseBody();
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);

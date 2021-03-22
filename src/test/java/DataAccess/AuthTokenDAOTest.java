@@ -12,27 +12,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 //We will use this to test that our insert method is working and failing in the right ways
 public class AuthTokenDAOTest {
-
-    private Database db;
+    private Database database;
     private AuthToken bestAuthToken;
     private AuthTokenDAO atDao;
 
     @BeforeEach
     public void setUp() throws Exception {
         try {
-            //here we can set up any classes or variables we will need for the rest of our tests
-            //lets create a new database
-            db = new Database();
-            //and a new event with random data
             bestAuthToken = new AuthToken("Gale", "Gale123A");
-            //Here, we'll open the connection in preparation for the test case to use it
-            Connection conn = db.getConnection();
-            UserDAO userDAO = new UserDAO(conn);
-            DatabaseDAO databaseDAO = new DatabaseDAO(conn);
 
-            //Let's clear the database as well so any lingering data doesn't affect our tests
+            database = new Database();
+            Connection conn = database.openConnection();
+            DatabaseDAO databaseDAO = new DatabaseDAO(conn);
             databaseDAO.clearTables();
-            //Then we pass that connection to the EventDAO so it can access the database
+
             atDao = new AuthTokenDAO(conn);
         }
         catch (Exception e) {
@@ -45,7 +38,7 @@ public class AuthTokenDAOTest {
         //Here we close the connection to the database file so it can be opened elsewhere.
         //We will leave commit to false because we have no need to save the changes to the database
         //between test cases
-        db.closeConnection(false);
+        database.closeConnection(false);
     }
 
     @Test

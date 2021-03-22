@@ -20,7 +20,6 @@ public class RegisterHandler implements HttpHandler {
 
         try {
             if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
-
                 RegisterService registerService = new RegisterService();
                 String json = StringUtil.getStringFromInputStream(exchange.getRequestBody());
 

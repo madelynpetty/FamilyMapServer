@@ -25,14 +25,10 @@ public class StringUtil {
         return sbuf.toString();
     }
 
-    public static String getRandomEventID() throws Exception {
+    public static String getRandomEventID(Connection conn) throws Exception {
         String id = null;
-        Database database = new Database();
-        Connection conn = null;
 
         try {
-            conn = database.getConnection();
-
             EventDAO eventDAO = new EventDAO(conn);
             Event event;
             do {
@@ -44,22 +40,14 @@ public class StringUtil {
         catch (Exception e) {
             throw new Exception("Error: cannot generate new eventID");
         }
-        finally {
-            if (conn != null) {
-                conn.close();
-            }
-        }
 
         return id;
     }
 
-    public static String getRandomPersonID() throws Exception {
+    public static String getRandomPersonID(Connection conn) throws Exception {
         String id = null;
-        Database database = new Database();
-        Connection conn = null;
 
         try {
-            conn = database.getConnection();
             PersonDAO personDAO = new PersonDAO(conn);
             Person person;
             do {
@@ -71,22 +59,13 @@ public class StringUtil {
         catch (Exception e) {
             throw new Exception("Error: cannot generate new personID");
         }
-        finally {
-            if (conn != null) {
-                conn.close();
-            }
-        }
         return id;
     }
 
-    public static String getRandomAuthToken() throws Exception {
+    public static String getRandomAuthToken(Connection conn) throws Exception {
         String authTokenID = null;
-        Database database = new Database();
-        Connection conn = null;
 
         try {
-            conn = database.getConnection();
-
             AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
             AuthToken authToken;
             do {
@@ -97,11 +76,6 @@ public class StringUtil {
         }
         catch (Exception e) {
             throw new Exception("Error: cannot generate new authToken");
-        }
-        finally {
-            if (conn != null) {
-                conn.close();
-            }
         }
         return authTokenID;
     }

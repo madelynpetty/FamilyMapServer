@@ -11,6 +11,7 @@ public class FillRequest {
     public FillRequest(String username, int generations) {
         this.username = username;
         this.generations = generations;
+        success = true;
     }
 
     public int getGenerations() {

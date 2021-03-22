@@ -21,23 +21,36 @@ public class DefaultHandler implements HttpHandler {
             String path;
             if (uri.equals(null) || uri.equals("/")) {
                 path = "web/index.html";
-            } else {
-                path = "web/" + uri;
+
+                String respData = StringUtil.getStringFromInputStream(exchange.getRequestBody());
+                OutputStream respBody = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
+                StringUtil.writeStringToStream(respData, respBody);
+                Path filePath = FileSystems.getDefault().getPath(path);
+                Files.copy(filePath, respBody);
+                respBody.close();
             }
+            else {
+                path = "web/HTML/404.html";
 
-            String respData = StringUtil.getStringFromInputStream(exchange.getRequestBody());
-
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
-            OutputStream respBody = exchange.getResponseBody();
-            writeString(respData, respBody);
-            Path filePath = FileSystems.getDefault().getPath(path);
-            Files.copy(filePath, respBody);
-            respBody.close();
-        } catch (IOException e) {
+                String respData = StringUtil.getStringFromInputStream(exchange.getRequestBody());
+                OutputStream respBody = exchange.getResponseBody();
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, 0);
+                StringUtil.writeStringToStream(respData, respBody);
+                Path filePath = FileSystems.getDefault().getPath(path);
+                Files.copy(filePath, respBody);
+                respBody.close();
+            }
+        }
+        catch (Exception e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
             exchange.getResponseBody().close(); //this is the respBody OutputStream from earlier
             e.printStackTrace();
-            throw new IOException("Error: default handle did not work");
+            try {
+                throw new Exception("Error: default handle did not work");
+            } catch (Exception exception) {
+                exception.printStackTrace();
+            }
         }
         finally {
             try {
@@ -47,13 +60,6 @@ public class DefaultHandler implements HttpHandler {
                 e.printStackTrace();
             }
         }
-    }
-
-    private void writeString(String str, OutputStream os) throws IOException {
-        OutputStreamWriter sw = new OutputStreamWriter(os);
-        BufferedWriter bw = new BufferedWriter(sw);
-        bw.write(str);
-        bw.flush();
     }
 }
 

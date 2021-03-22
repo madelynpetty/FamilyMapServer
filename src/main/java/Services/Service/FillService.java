@@ -28,11 +28,16 @@ public class FillService {
         FillResult fillResult;
         Database database = new Database();
         Connection conn = null;
+        boolean doCommit = false;
 
         try {
             conn = database.openConnection();
             UserDAO userDAO = new UserDAO(conn);
             User user = userDAO.find(request.getUsername());
+
+            if (user == null) {
+                throw new Exception("Error: cannot find user in the database");
+            }
 
             PersonDAO personDAO = new PersonDAO(conn);
             personDAO.clear(request.getUsername());
@@ -49,7 +54,7 @@ public class FillService {
             person.setBirthYear(randomBirthYear);
             person.setGeneration(0);
 
-            createEvents(person, randomBirthYear, 0,false, conn);
+            createEvents(person, randomBirthYear,false, conn);
 
             //NEED TO CREATE GENERATIONS AND EVENTS HERE
             Person currPerson = null;
@@ -57,24 +62,19 @@ public class FillService {
                 for (int j = 0; j < people.size(); j++) {
                     currPerson = people.get(j);
                     if (currPerson.getGeneration() == i - 1) {
-                        Person mom = new Person(StringUtil.getRandomPersonID(), user.getUsername(),
+                        Person mom = new Person(StringUtil.getRandomPersonID(conn), user.getUsername(),
                                 RandomDataUtils.getInstance().getRandomFemaleName(),
                                 RandomDataUtils.getInstance().getRandomSurname(),
                                 "f", null, null, null);
-                        mom.setBirthYear(RandomDataUtils.getRandomNumber(currPerson.getBirthYear() - 50, currPerson.getBirthYear() - 13));
+                        mom.setBirthYear(RandomDataUtils.getRandomNumber(currPerson.getBirthYear() - 40, currPerson.getBirthYear() - 20));
                         mom.setGeneration(i);
 
-                        Person dad = new Person(StringUtil.getRandomPersonID(), user.getUsername(),
+                        Person dad = new Person(StringUtil.getRandomPersonID(conn), user.getUsername(),
                                 RandomDataUtils.getInstance().getRandomMaleName(),
                                 currPerson.getLastName(), "m", null, null, mom.getPersonID());
-                        dad.setBirthYear(RandomDataUtils.getRandomNumber(currPerson.getBirthYear() - 50, currPerson.getBirthYear() - 13));
+                        dad.setBirthYear(RandomDataUtils.getRandomNumber(mom.getBirthYear() - 4, mom.getBirthYear() + 4));
                         dad.setGeneration(i);
                         mom.setSpouseID(dad.getPersonID());
-
-                        int marriage = mom.getBirthYear() + RandomDataUtils.getRandomNumber(13, 50);
-                        if (mom.getBirthYear() > dad.getBirthYear()) {
-                            marriage = dad.getBirthYear() + RandomDataUtils.getRandomNumber(13, 50);
-                        }
 
                         createPerson(mom, conn);
                         people.add(mom);
@@ -82,8 +82,10 @@ public class FillService {
                         createPerson(dad, conn);
                         people.add(dad);
 
-                        createEvents(mom, mom.getBirthYear(), marriage, true, conn);
-                        createEvents(dad, dad.getBirthYear(), marriage, true, conn);
+                        createEvents(mom, mom.getBirthYear(), true, conn);
+                        createEvents(dad, dad.getBirthYear(), true, conn);
+
+                        createMarriageEvent(mom, dad, conn);
 
                         currPerson.setMotherID(mom.getPersonID());
                         currPerson.setFatherID(dad.getPersonID());
@@ -93,16 +95,16 @@ public class FillService {
                 }
             }
 
+            doCommit = true;
             fillResult = new FillResult("Successfully added " + people.size() + " persons and " + events.size() + " events to the database.", true);
         }
         catch (Exception e) {
+            doCommit = false;
             fillResult = new FillResult("Error: Could not fill the database", false);
         }
         finally {
             try {
-                if (conn != null) {
-                    database.closeConnection(true);
-                }
+                database.closeConnection(doCommit);
             }
             catch (Exception e){
                 e.printStackTrace();
@@ -121,13 +123,13 @@ public class FillService {
         }
     }
 
-    private void createEvents(Person person, int birthYear, int marriageYear, boolean canDie, Connection conn) throws Exception {
+    private void createEvents(Person person, int birthYear, boolean canDie, Connection conn) throws Exception {
         try {
             EventDAO eventDAO = new EventDAO(conn);
             int minDeathDate = birthYear;
 
             //always create birth event first
-            Event birthEvent = new Event(StringUtil.getRandomEventID(), person.getAssociatedUsername(), person.getPersonID(),
+            Event birthEvent = new Event(StringUtil.getRandomEventID(conn), person.getAssociatedUsername(), person.getPersonID(),
                     RandomDataUtils.getInstance().getRandomLatitude(), RandomDataUtils.getInstance().getRandomLongitude(),
                     RandomDataUtils.getInstance().getRandomCountry(), RandomDataUtils.getInstance().getRandomCity(),
                     "birth", birthYear);
@@ -142,38 +144,25 @@ public class FillService {
                 if (baptismYear > minDeathDate) {
                     minDeathDate = baptismYear;
                 }
-                Event baptismEvent = new Event(StringUtil.getRandomEventID(), person.getAssociatedUsername(), person.getPersonID(),
+                Event baptismEvent = new Event(StringUtil.getRandomEventID(conn), person.getAssociatedUsername(), person.getPersonID(),
                         RandomDataUtils.getInstance().getRandomLatitude(), RandomDataUtils.getInstance().getRandomLongitude(),
                         RandomDataUtils.getInstance().getRandomCountry(), RandomDataUtils.getInstance().getRandomCity(),
                         "baptism", baptismYear);
                 eventDAO.insert(baptismEvent);
                 events.add(baptismEvent);
 
-                if (marriageYear > 2021) {
-                    marriageYear = 2021;
-                }
-                if (marriageYear > minDeathDate) {
-                    minDeathDate = marriageYear;
-                }
-                Event marriageEvent = new Event(StringUtil.getRandomEventID(), person.getAssociatedUsername(), person.getPersonID(),
-                        RandomDataUtils.getInstance().getRandomLatitude(), RandomDataUtils.getInstance().getRandomLongitude(),
-                        RandomDataUtils.getInstance().getRandomCountry(), RandomDataUtils.getInstance().getRandomCity(),
-                        "marriage", marriageYear);
-                eventDAO.insert(marriageEvent);
-                events.add(marriageEvent);
-
                 int deathYear = RandomDataUtils.getRandomNumber(minDeathDate, 120 + birthYear);
                 if (deathYear > 2021) {
                     deathYear = 2021;
                 }
-                if (birthYear > 2020 - 120 || RandomDataUtils.getRandomNumber(0, 10) > 7) {
-                    Event deathEvent = new Event(StringUtil.getRandomEventID(), person.getAssociatedUsername(), person.getPersonID(),
-                            RandomDataUtils.getInstance().getRandomLatitude(), RandomDataUtils.getInstance().getRandomLongitude(),
-                            RandomDataUtils.getInstance().getRandomCountry(), RandomDataUtils.getInstance().getRandomCity(),
-                            "death", deathYear);
-                    eventDAO.insert(deathEvent);
-                    events.add(deathEvent);
-                }
+                Event deathEvent = new Event(StringUtil.getRandomEventID(conn), person.getAssociatedUsername(), person.getPersonID(),
+                        RandomDataUtils.getInstance().getRandomLatitude(), RandomDataUtils.getInstance().getRandomLongitude(),
+                        RandomDataUtils.getInstance().getRandomCountry(), RandomDataUtils.getInstance().getRandomCity(),
+                        "death", deathYear);
+                eventDAO.insert(deathEvent);
+                events.add(deathEvent);
+                person.setDeathYear(deathYear);
+
             }
 
         }
@@ -181,5 +170,39 @@ public class FillService {
             throw new Exception("Error: could not create birth event.");
         }
 
+    }
+
+    private void createMarriageEvent(Person mom, Person dad, Connection conn) throws Exception {
+        int minYear = mom.getBirthYear() > dad.getBirthYear() ? dad.getBirthYear() + 14 : mom.getBirthYear() + 14;
+        int maxYear = mom.getBirthYear() > dad.getBirthYear() ? dad.getBirthYear() + 50 : mom.getBirthYear() + 50;
+
+        int marriageYear = RandomDataUtils.getRandomNumber(minYear, maxYear);
+
+        if (marriageYear > mom.getDeathYear()) {
+            marriageYear = mom.getDeathYear();
+        }
+        if (marriageYear > dad.getDeathYear()) {
+            marriageYear = dad.getDeathYear();
+        }
+
+        if (marriageYear > 2021) {
+            marriageYear = 2021;
+        }
+
+        EventDAO eventDAO = new EventDAO(conn);
+        float latitude = RandomDataUtils.getInstance().getRandomLatitude();
+        float longitude = RandomDataUtils.getInstance().getRandomLongitude();
+        String country = RandomDataUtils.getInstance().getRandomCountry();
+        String city = RandomDataUtils.getInstance().getRandomCity();
+
+        Event marriageEventMom = new Event(StringUtil.getRandomEventID(conn), mom.getAssociatedUsername(), mom.getPersonID(),
+                latitude, longitude, country, city, "marriage", marriageYear);
+        eventDAO.insert(marriageEventMom);
+        events.add(marriageEventMom);
+
+        Event marriageEventDad = new Event(StringUtil.getRandomEventID(conn), dad.getAssociatedUsername(), dad.getPersonID(),
+                latitude, longitude, country, city, "marriage", marriageYear);
+        eventDAO.insert(marriageEventDad);
+        events.add(marriageEventDad);
     }
 }

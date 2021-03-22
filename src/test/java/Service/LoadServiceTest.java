@@ -34,11 +34,6 @@ public class LoadServiceTest {
         loadService = new LoadService();
     }
 
-//    @AfterEach
-//    public void tearDown() throws DataAccessException {
-//        database.closeConnection(false);
-//    }
-
     @Test
     public void testCallLoadServicePass() throws Exception {
         LoadResult loadResult = new LoadResult("Successfully added " + 2 +

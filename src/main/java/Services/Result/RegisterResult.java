@@ -4,16 +4,16 @@ package Services.Result;
  * The response based on the success of the service
  */
 public class RegisterResult {
-    public boolean success = false;
     public String authtoken;
     public String personID;
     public String username;
+    public boolean success = false;
 
     public RegisterResult(String authtoken, String username, String personID) {
-        success = true;
         this.personID = personID;
         this.username = username;
         this.authtoken = authtoken;
+        success = true;
     }
 
     @Override

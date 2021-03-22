@@ -1,15 +1,11 @@
 package Services.Request;
-import Models.Event;
-
-import java.util.ArrayList;
 
 /**
  * Takes the request and turns it into a Java object
  */
 public class EventRequest {
-    private ArrayList<Event> events;
+    private String associatedUsername;
     private String eventID;
-    private String username;
     private String personID;
     private float latitude;
     private float longitude;
@@ -26,12 +22,12 @@ public class EventRequest {
         this.eventID = eventID;
     }
 
-    public String getUsername() {
-        return username;
+    public String getAssociatedUsername() {
+        return associatedUsername;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setAssociatedUsername(String associatedUsername) {
+        this.associatedUsername = associatedUsername;
     }
 
     public String getPersonID() {
