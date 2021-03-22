@@ -25,9 +25,9 @@ public class LoadDataUtils {
         return events;
     }
 
-    private static void setUserArray(String json) throws Exception {
-//        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/passoffFiles/LoadData.json"));
-        Object obj = new JsonParser().parse(json);
+    public static ArrayList<User> getMockUserArray() throws Exception {
+        ArrayList<User> returnArrayList = new ArrayList<>();
+        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/passoffFiles/LoadData.json"));
         try {
             JsonObject jo = (JsonObject) obj;
             JsonArray usersIterator = jo.get("users").getAsJsonArray();
@@ -42,17 +42,19 @@ public class LoadDataUtils {
                 String personID = u.get("personID").getAsString();
 
                 User user = new User(username, password, email, firstName, lastName, gender, personID);
-                users.add(user);
+                returnArrayList.add(user);
             }
         }
         catch (Exception e) {
             throw new Exception("Error: Could not populate user array");
         }
+        return returnArrayList;
     }
 
-    private static void setPersonArray(String json) throws Exception {
-//        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/passoffFiles/LoadData.json"));
-        Object obj = new JsonParser().parse(json);
+    public static ArrayList<Person> getMockPersonArray() throws Exception {
+        ArrayList<Person> returnArrayList = new ArrayList<>();
+        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/passoffFiles/LoadData.json"));
+//        Object obj = new JsonParser().parse(json);
         try {
             JsonObject jo = (JsonObject) obj;
             JsonArray personIterator = jo.get("persons").getAsJsonArray();
@@ -68,17 +70,19 @@ public class LoadDataUtils {
                 String associatedUsername = p.get("associatedUsername").getAsString();
 
                 Person person = new Person(personID, associatedUsername, firstName, lastName, gender, fatherID, motherID, spouseID);
-                persons.add(person);
+                returnArrayList.add(person);
             }
         }
         catch (Exception e) {
             throw new Exception("Error: Could not populate person array");
         }
+        return returnArrayList;
     }
 
-    private static void setEventArray(String json) throws Exception {
-//        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/passoffFiles/LoadData.json"));
-        Object obj = new JsonParser().parse(json);
+    public static ArrayList<Event> getMockEventArray() throws Exception {
+        ArrayList<Event> returnArrayList = new ArrayList<>();
+        Object obj = new JsonParser().parse(new FileReader("/Users/maddie/IdeaProjects/FamilyMap/passoffFiles/LoadData.json"));
+//        Object obj = new JsonParser().parse(json);
         try {
             JsonObject jo = (JsonObject) obj;
             JsonArray eventIterator = jo.get("events").getAsJsonArray();
@@ -96,11 +100,12 @@ public class LoadDataUtils {
                 String associatedUsername = e.get("associatedUsername").getAsString();
 
                 Event event = new Event(eventID, associatedUsername, personID, latitude, longitude, country, city, eventType, year);
-                events.add(event);
+                returnArrayList.add(event);
             }
         }
         catch (Exception e) {
             throw new Exception("Error: Could not populate event array");
         }
+        return returnArrayList;
     }
 }

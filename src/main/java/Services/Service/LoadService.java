@@ -31,11 +31,7 @@ public class LoadService {
             PersonDAO personDAO = new PersonDAO(conn);
             EventDAO eventDAO = new EventDAO(conn);
 
-//            request.setUsers(LoadDataUtils.getUserArray());
-//            request.setPersons(LoadDataUtils.getPersonArray());
-//            request.setEvents(LoadDataUtils.getEventArray());
-
-            userDAO.clear(); //don't need to capture the return value
+            database.clearTables();
 
             for (int i = 0; i < request.getUsers().size(); i++) {
                 userDAO.insert(request.getUsers().get(i));

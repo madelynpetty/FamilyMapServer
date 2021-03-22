@@ -109,28 +109,6 @@ public class UserDAO {
 
         }
     }
-
-    /**
-     * Clears the user table in the database
-     *
-     * @return a boolean of whether or not the user table in the database was cleared
-     */
-    public boolean clear() throws DataAccessException, SQLException {
-        try (Statement stmt = conn.createStatement()) {
-            String sql = "DELETE FROM event";
-            stmt.executeUpdate(sql);
-            sql = "DELETE FROM user";
-            stmt.executeUpdate(sql);
-            sql = "DELETE FROM person";
-            stmt.executeUpdate(sql);
-            sql = "DELETE FROM authToken";
-            stmt.executeUpdate(sql);
-        } catch (SQLException e) {
-            throw new DataAccessException("SQL Error encountered while clearing tables");
-        }
-        return true;
-    }
-
 }
 
 

@@ -6,7 +6,6 @@ package Services.Request;
 public class LoginRequest {
     private String username;
     private String password;
-    private String authToken;
 
     private boolean success = false;
 
@@ -20,9 +19,6 @@ public class LoginRequest {
 
         this.username = username;
         this.password = password;
-
-        //get authtoken and personid from authtoken/person classes
-        //authtoken gotten from service
     }
 
     public String getUsername() {
@@ -41,6 +37,4 @@ public class LoginRequest {
         this.password = password;
     }
 
-
-    //HERE IS WHERE ERROR CHECKING GOES
 }

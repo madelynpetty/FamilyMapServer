@@ -1,5 +1,8 @@
 package Services.Result;
 
+import Models.User;
+import Services.Service.ClearService;
+
 /**
  * The response based on the success of the service
  */
@@ -12,8 +15,17 @@ public class ClearResult {
         this.success = success;
     }
 
-    public String getMessage() {
-        return message;
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof ClearResult) {
+            ClearResult cr = (ClearResult) o;
+            return cr.message.equals(message) &&
+                    cr.success == (success);
+        } else {
+            return false;
+        }
     }
 }
 

@@ -5,15 +5,10 @@ import DataAccess.UserDAO;
 import Models.AuthToken;
 import Models.User;
 import Services.Request.FillRequest;
-import Services.Result.FillResult;
-import Services.Result.LoginResult;
 import Utils.StringUtil;
 import Services.Result.RegisterResult;
 import Services.Request.RegisterRequest;
-import com.google.gson.Gson;
 
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
 import java.sql.Connection;
 
 /**
@@ -53,7 +48,7 @@ public class RegisterService {
             //now call fill service
             FillRequest fillRequest = new FillRequest(request.getUsername(), 4);
             FillService fillService = new FillService();
-            FillResult fillResult = fillService.callFillService(fillRequest);
+            fillService.callFillService(fillRequest);
 
             return registerResult;
         }

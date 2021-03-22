@@ -65,7 +65,7 @@ public class PersonHandler implements HttpHandler {
                 outputStream.close();
             }
             else {
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
+                throw new Exception("Error: Unable to return person's family members");
             }
         }
         catch (Exception e) {
@@ -79,7 +79,12 @@ public class PersonHandler implements HttpHandler {
             outputStream.close();
         }
         finally {
-            exchange.getResponseBody().close();
+            try {
+                exchange.getResponseBody().close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

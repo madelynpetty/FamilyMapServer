@@ -11,12 +11,12 @@ import java.util.ArrayList;
  * Takes the request and turns it into a Java object
  */
 public class LoadRequest {
-    private ArrayList<User> users = LoadDataUtils.getUserArray();
-    private ArrayList<Person> persons = LoadDataUtils.getPersonArray();
-    private ArrayList<Event> events = LoadDataUtils.getEventArray();
+    private ArrayList<User> users = new ArrayList<>();
+    private ArrayList<Person> persons = new ArrayList<>();
+    private ArrayList<Event> events = new ArrayList<>();
 
     /**
-     * @return Returns user array from LoadData.json
+     * @return Returns user array
      */
     public ArrayList<User> getUsers() {
         return users;
@@ -31,7 +31,7 @@ public class LoadRequest {
     }
 
     /**
-     * Returns the person array from LoadData.json
+     * Returns the person array
      * @return
      */
     public ArrayList<Person> getPersons() {
@@ -47,7 +47,7 @@ public class LoadRequest {
     }
 
     /**
-     * Returns the Events array from LoadData.json
+     * Returns the Events array
      * @return
      */
     public ArrayList<Event> getEvents() {

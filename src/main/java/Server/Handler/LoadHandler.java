@@ -32,7 +32,7 @@ public class LoadHandler implements HttpHandler {
                 outputStream.close();
             }
             else {
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, 0);
+                throw new Exception("Error: Unable to load");
             }
         }
         catch (Exception e) {
@@ -45,7 +45,12 @@ public class LoadHandler implements HttpHandler {
             outputStream.close();
         }
         finally {
-            exchange.getResponseBody().close();
+            try {
+                exchange.getResponseBody().close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

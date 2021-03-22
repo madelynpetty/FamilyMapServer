@@ -1,5 +1,7 @@
 package Services.Result;
 
+import Services.Request.FillRequest;
+
 /**
  * The response based on the success of the service
  */
@@ -15,5 +17,18 @@ public class FillResult {
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof FillResult) {
+            FillResult fillResult = (FillResult) o;
+            return fillResult.message.equals(message) &&
+                    fillResult.success == (success);
+        } else {
+            return false;
+        }
     }
 }

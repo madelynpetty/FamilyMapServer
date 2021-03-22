@@ -149,8 +149,6 @@ public class PersonDAO {
         return persons;
     }
 
-
-
     /**
      * Updates the person in the person table in the database
      * @param person the person to be updated in the database

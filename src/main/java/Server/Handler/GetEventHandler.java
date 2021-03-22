@@ -63,7 +63,7 @@ public class GetEventHandler implements HttpHandler {
                 StringUtil.writeStringToStream(response, outputStream);
                 outputStream.close();
             } else {
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN,0);
+                throw new Exception("Error: Unable to get family events");
             }
         }
         catch (Exception e) {
@@ -76,7 +76,12 @@ public class GetEventHandler implements HttpHandler {
             outputStream.close();
         }
         finally {
-            exchange.getResponseBody().close();
+            try {
+                exchange.getResponseBody().close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

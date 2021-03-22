@@ -26,9 +26,6 @@ public class EventService {
         EventListResult eventListResult = null;
         try {
             Connection conn = database.getConnection();
-//
-//            PersonDAO personDAO = new PersonDAO(conn);
-//            Person person = personDAO.findByUsername(authToken.getUsername());
 
             EventDAO eventDAO = new EventDAO(conn);
             ArrayList<Event> events = eventDAO.findByUsername(authToken.getUsername());

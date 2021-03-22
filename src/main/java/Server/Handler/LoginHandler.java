@@ -38,7 +38,7 @@ public class LoginHandler implements HttpHandler {
             }
         }
         catch (Exception e) {
-            exchange.sendResponseHeaders(HttpURLConnection.HTTP_UNAUTHORIZED, 0);
+            exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
             LoginResult loginResult = new LoginResult(e.getMessage());
             String response = gson.toJson(loginResult);
@@ -47,7 +47,12 @@ public class LoginHandler implements HttpHandler {
             outputStream.close();
         }
         finally {
-            exchange.getResponseBody().close();
+            try {
+                exchange.getResponseBody().close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }

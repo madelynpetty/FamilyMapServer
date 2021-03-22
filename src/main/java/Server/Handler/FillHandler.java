@@ -82,7 +82,7 @@ public class FillHandler implements HttpHandler {
                 outputStream.close();
             }
             else {
-                throw new Exception("Error: Invalid request type");
+                throw new Exception("Error: Unable to fill");
             }
         }
         catch(Exception e) {
@@ -95,7 +95,12 @@ public class FillHandler implements HttpHandler {
             outputStream.close();
         }
         finally {
-            exchange.getResponseBody().close();
+            try {
+                exchange.getResponseBody().close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

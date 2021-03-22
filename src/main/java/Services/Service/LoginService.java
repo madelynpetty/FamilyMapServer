@@ -45,7 +45,6 @@ public class LoginService {
                 authTokenDAO.insert(authToken);
 
                 loginResult = new LoginResult(authToken.getAuthToken(), user.getUsername(), user.getPersonID());
-
             }
         }
         catch (DataAccessException e) {

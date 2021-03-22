@@ -2,6 +2,7 @@ package Services.Service;
 import DataAccess.DataAccessException;
 import DataAccess.Database;
 import DataAccess.UserDAO;
+import Models.User;
 import Services.Result.ClearResult;
 
 import java.sql.Connection;
@@ -11,8 +12,6 @@ import java.sql.Connection;
  */
 public class ClearService {
     private Database database = new Database();
-    private static String message;
-    private static boolean success;
 
     /**
      * Returns the result of calling the Clear Service
@@ -21,17 +20,12 @@ public class ClearService {
         ClearResult clearResult;
         try {
             Connection conn = database.getConnection();
-            UserDAO userDAO = new UserDAO(conn);
+            database.clearTables();
 
-            success = true;
-            message = "Clear succeeded";
-            clearResult = new ClearResult("Database was successfully cleared", userDAO.clear());
+            clearResult = new ClearResult("Clear succeeded.", true);
         }
         catch (Exception e) {
-            success = false;
-            message = "Error: Could not clear the database";
             clearResult = new ClearResult("Error: Could not clear the database", false);
-//            throw e;
         }
         finally {
             try {
@@ -43,13 +37,5 @@ public class ClearService {
         }
 
         return clearResult;
-    }
-
-    public static String getMessage() {
-        return message;
-    }
-
-    public static boolean getSuccess() {
-        return success;
     }
 }

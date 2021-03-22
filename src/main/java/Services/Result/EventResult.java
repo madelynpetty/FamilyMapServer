@@ -1,9 +1,5 @@
 package Services.Result;
 
-import Models.Event;
-
-import java.util.ArrayList;
-
 /**
  * The response based on the success of the service
  */
@@ -42,5 +38,25 @@ public class EventResult {
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof EventResult) {
+            EventResult eventResult = (EventResult) o;
+            return eventResult.associatedUsername.equals(associatedUsername) &&
+                    eventResult.eventID.equals(eventID) &&
+                    eventResult.personID.equals(personID) &&
+                    eventResult.latitude == (latitude) &&
+                    eventResult.longitude == (longitude) &&
+                    eventResult.country.equals(country) &&
+                    eventResult.city.equals(city) &&
+                    eventResult.eventType.equals(eventType) &&
+                    eventResult.year == (year);
+        } else {
+            return false;
+        }
     }
 }

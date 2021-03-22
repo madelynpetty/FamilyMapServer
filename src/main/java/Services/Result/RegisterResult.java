@@ -5,7 +5,7 @@ package Services.Result;
  */
 public class RegisterResult {
     public boolean success = false;
-    public String authToken;
+    public String authtoken;
     public String personID;
     public String username;
 
@@ -16,16 +16,31 @@ public class RegisterResult {
         this.message = message;
     }
 
-    public RegisterResult(String authToken, String username, String personID) {
+    public RegisterResult(String authtoken, String username, String personID) {
         message = null;
         success = true;
         this.personID = personID;
         this.username = username;
-        this.authToken = authToken;
+        this.authtoken = authtoken;
     }
 
     public String getMessage() {
         return message;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof RegisterResult) {
+            RegisterResult registerResult = (RegisterResult) o;
+            return registerResult.success == (success) &&
+                    registerResult.authtoken.equals(authtoken) &&
+                    registerResult.personID.equals(personID) &&
+                    registerResult.username.equals(username);
+        } else {
+            return false;
+        }
     }
 
 }

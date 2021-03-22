@@ -64,7 +64,7 @@ public class GetPersonHandler implements HttpHandler {
                 outputStream.close();
             }
             else {
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, 0);
+                throw new Exception("Error: Unable to get person with given personID");
             }
         }
         catch (Exception e) {
@@ -77,7 +77,12 @@ public class GetPersonHandler implements HttpHandler {
             outputStream.close();
         }
         finally {
-            exchange.getResponseBody().close();
+            try {
+                exchange.getResponseBody().close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

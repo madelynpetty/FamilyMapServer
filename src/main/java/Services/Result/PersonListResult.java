@@ -26,4 +26,18 @@ public class PersonListResult {
         this.message = message;
         success = false;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof PersonListResult) {
+            PersonListResult personListResult = (PersonListResult) o;
+            return personListResult.persons.equals(persons) &&
+                    personListResult.success == (success) &&
+                    personListResult.message.equals(message);
+        } else {
+            return false;
+        }
+    }
 }

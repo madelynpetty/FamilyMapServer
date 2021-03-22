@@ -19,9 +19,7 @@ public class ClearHandler implements HttpHandler {
             if (exchange.getRequestMethod().toUpperCase().equals("POST")) {
                 ClearService clearService = new ClearService();
 
-                clearService.callClearService();
-                ClearResult clearResult = new ClearResult(clearService.getMessage(), clearService.getSuccess());
-                //            String response = "{\n\"message\": " + clearService.getMessage() + "\n\"success\":" + clearService.getSuccess() + "\n}";
+                ClearResult clearResult = clearService.callClearService();
 
                 exchange.sendResponseHeaders(HttpURLConnection.HTTP_OK, 0);
                 Gson gson = new Gson();
@@ -30,12 +28,10 @@ public class ClearHandler implements HttpHandler {
                 StringUtil.writeStringToStream(response, outputStream);
 
                 outputStream.close();
+            } else {
+                throw new Exception("Error: Unable to clear");
             }
-            else {
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, 0);
-            }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             Gson gson = new Gson();
             ClearResult clearResult = new ClearResult(e.getMessage(), false);
@@ -43,13 +39,12 @@ public class ClearHandler implements HttpHandler {
             OutputStream outputStream = exchange.getResponseBody();
             StringUtil.writeStringToStream(response, outputStream);
             outputStream.close();
+        } finally {
+            try {
+                exchange.getResponseBody().close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
-
-//    private void writeString(String str, OutputStream os) throws IOException {
-//        OutputStreamWriter sw = new OutputStreamWriter(os);
-//        BufferedWriter bw = new BufferedWriter(sw);
-//        bw.write(str);
-//        bw.flush();
-//    }
 }

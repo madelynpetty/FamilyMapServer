@@ -1,11 +1,12 @@
 package DataAccess;
 
 import Models.AuthToken;
+import Utils.RandomDataUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.sql.Connection;
-import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,6 +16,11 @@ public class AuthTokenDAOTest {
     private Database db;
     private AuthToken bestAuthToken;
     private AuthTokenDAO atDao;
+
+//    @BeforeAll
+//    static void fillDatabase() throws Exception {
+//        RandomDataUtils.addRandomDataForClearing();
+//    }
 
     @BeforeEach
     public void setUp() throws Exception {
@@ -26,9 +32,10 @@ public class AuthTokenDAOTest {
             bestAuthToken = new AuthToken("Gale", "Gale123A");
             //Here, we'll open the connection in preparation for the test case to use it
             Connection conn = db.getConnection();
-            //Let's clear the database as well so any lingering data doesn't affect our tests
             UserDAO userDAO = new UserDAO(conn);
-            userDAO.clear();
+
+            //Let's clear the database as well so any lingering data doesn't affect our tests
+            db.clearTables();
             //Then we pass that connection to the EventDAO so it can access the database
             atDao = new AuthTokenDAO(conn);
         }
@@ -73,4 +80,21 @@ public class AuthTokenDAOTest {
         //comes after the "()->" and expects it to throw an instance of the class in the first parameter.
         assertThrows(DataAccessException.class, ()-> atDao.insert(bestAuthToken));
     }
+
+    @Test
+    public void findPass() throws DataAccessException {
+        atDao.insert(bestAuthToken);
+        atDao.find(bestAuthToken.getAuthToken());
+        AuthToken compareTest = atDao.find(bestAuthToken.getAuthToken());
+        assertEquals(bestAuthToken, compareTest);
+    }
+
+    @Test
+    public void findFail() throws DataAccessException {
+        atDao.insert(bestAuthToken);
+        AuthToken compareTest = atDao.find(bestAuthToken.getAuthToken());
+        assertEquals(bestAuthToken, compareTest);
+    }
+
+
 }

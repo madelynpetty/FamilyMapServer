@@ -15,4 +15,17 @@ public class LoadResult {
     public String getMessage() {
         return message;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof LoadResult) {
+            LoadResult loadResult = (LoadResult) o;
+            return loadResult.message.equals(message) &&
+                    loadResult.success == (success);
+        } else {
+            return false;
+        }
+    }
 }

@@ -1,8 +1,14 @@
 package Utils;
 
+import DataAccess.*;
+import Models.AuthToken;
+import Models.Event;
+import Models.Person;
+import Models.User;
 import com.google.gson.*;
 
 import java.io.*;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -233,5 +239,34 @@ public class RandomDataUtils {
         }
 
         return longitudes;
+    }
+
+    public static void addRandomDataForClearing() throws Exception {
+        try {
+            Database database = new Database();
+            Connection conn = database.getConnection();
+            EventDAO eventDAO = new EventDAO(conn);
+            Event event = new Event("Biking_123A", "Gale", "Gale123A",
+                    35.9f, 140.1f, "Japan", "Ushiku",
+                    "Biking_Around", 2016);
+            eventDAO.insert(event);
+
+            PersonDAO personDAO = new PersonDAO(conn);
+            Person person = new Person("Gale123A", "Gale", "Gale",
+                    "Johnson", "m", "Mark123A", "Mother12", "Spouse12");
+            personDAO.insert(person);
+
+            UserDAO userDAO = new UserDAO(conn);
+            User user = new User("Gale", "pass123", "gale@gmail.com",
+                    "Gale", "Johnson", "m", "Gale123A");
+            userDAO.insert(user);
+
+            AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
+            AuthToken authToken = new AuthToken("Gale", "Gale123A");
+            authTokenDAO.insert(authToken);
+        }
+        catch (Exception e) {
+            throw new Exception("Cannot populate the database for clearing");
+        }
     }
 }

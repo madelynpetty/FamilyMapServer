@@ -39,6 +39,14 @@ public class DefaultHandler implements HttpHandler {
             e.printStackTrace();
             throw new IOException("Error: default handle did not work");
         }
+        finally {
+            try {
+                exchange.getResponseBody().close();
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private void writeString(String str, OutputStream os) throws IOException {

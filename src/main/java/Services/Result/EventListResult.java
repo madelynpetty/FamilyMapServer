@@ -25,4 +25,18 @@ public class EventListResult {
     public String getMessage() {
         return message;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof EventListResult) {
+            EventListResult eventListResult = (EventListResult) o;
+            return eventListResult.events.equals(events) &&
+                    eventListResult.success == (success);
+        } else {
+            return false;
+        }
+    }
 }

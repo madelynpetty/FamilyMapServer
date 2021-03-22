@@ -1,7 +1,10 @@
 package DataAccess;
 
+import Models.Person;
 import Models.User;
+import Utils.RandomDataUtils;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.sql.Connection;
@@ -14,14 +17,19 @@ public class UserDAOTest {
     private User bestUser;
     private UserDAO uDao;
 
+//    @BeforeAll
+//    static void fillDatabase() throws Exception {
+//        RandomDataUtils.addRandomDataForClearing();
+//    }
+
     @BeforeEach
-    public void setUp() throws DataAccessException {
+    public void setUp() throws Exception {
         //here we can set up any classes or variables we will need for the rest of our tests
         //lets create a new database
         db = new Database();
         //and a new user with random data
         bestUser = new User("Gale", "pass123", "gale@gmail.com",
-                "Gale", "Johnson", "m", "Gale123");
+                "Gale", "Johnson", "m", "Gale123A");
         //Here, we'll open the connection in preparation for the test case to use it
         Connection conn = db.getConnection();
         //Let's clear the database as well so any lingering data doesn't affect our tests
@@ -66,4 +74,32 @@ public class UserDAOTest {
         //comes after the "()->" and expects it to throw an instance of the class in the first parameter.
         assertThrows(DataAccessException.class, ()-> uDao.insert(bestUser));
     }
+
+    @Test
+    public void findPass() throws DataAccessException {
+        uDao.insert(bestUser);
+        uDao.find(bestUser.getUsername());
+        User compareTest = uDao.find(bestUser.getUsername());
+        assertEquals(bestUser, compareTest);
+    }
+
+    @Test
+    public void findFail() throws DataAccessException {
+        uDao.insert(bestUser);
+        User compareTest = uDao.find(bestUser.getUsername());
+        assertEquals(bestUser, compareTest);
+    }
+
+    @Test
+    public void loginPass() throws Exception {
+        uDao.insert(bestUser);
+        User user = uDao.login("Gale", "pass123");
+        assertEquals(user, bestUser);
+    }
+
+    @Test
+    public void loginFail() throws Exception {
+        assertThrows(Exception.class, ()-> uDao.login("username", "passwordddd"));
+    }
+
 }
