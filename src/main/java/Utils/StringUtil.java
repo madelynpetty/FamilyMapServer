@@ -28,55 +28,58 @@ public class StringUtil {
     public static String getRandomEventID(Connection conn) throws Exception {
         String id = null;
 
-        try {
-            EventDAO eventDAO = new EventDAO(conn);
-            Event event;
-            do {
-                id = getRandomID();
-                event = eventDAO.find(id);
-            }
-            while (event != null);
-        }
-        catch (Exception e) {
-            throw new Exception("Error: cannot generate new eventID");
-        }
+//        try {
+//            EventDAO eventDAO = new EventDAO(conn);
+//            Event event;
+//            do {
+//                id = getRandomID();
+//                event = eventDAO.find(id);
+//            }
+//            while (event != null);
+//        }
+//        catch (Exception e) {
+//            throw new Exception("Error: cannot generate new eventID");
+//        }
 
+        id = getRandomID();
         return id;
     }
 
     public static String getRandomPersonID(Connection conn) throws Exception {
         String id = null;
 
-        try {
-            PersonDAO personDAO = new PersonDAO(conn);
-            Person person;
-            do {
-                id = getRandomID();
-                person = personDAO.find(id);
-            }
-            while (person != null);
-        }
-        catch (Exception e) {
-            throw new Exception("Error: cannot generate new personID");
-        }
+//        try {
+//            PersonDAO personDAO = new PersonDAO(conn);
+//            Person person;
+//            do {
+//                id = getRandomID();
+//                person = personDAO.find(id);
+//            }
+//            while (person != null);
+//        }
+//        catch (Exception e) {
+//            throw new Exception("Error: cannot generate new personID");
+//        }
+        id = getRandomID();
         return id;
     }
 
     public static String getRandomAuthToken(Connection conn) throws Exception {
         String authTokenID = null;
 
-        try {
-            AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
-            AuthToken authToken;
-            do {
-                authTokenID = getRandomID();
-                authToken = authTokenDAO.find(authTokenID);
-            }
-            while (authToken != null);
-        }
-        catch (Exception e) {
-            throw new Exception("Error: cannot generate new authToken");
-        }
+//        try {
+//            AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
+//            AuthToken authToken;
+//            do {
+//                authTokenID = getRandomID();
+//                authToken = authTokenDAO.find(authTokenID);
+//            }
+//            while (authToken != null);
+//        }
+//        catch (Exception e) {
+//            throw new Exception("Error: cannot generate new authToken");
+//        }
+        authTokenID = getRandomID();
         return authTokenID;
     }
 

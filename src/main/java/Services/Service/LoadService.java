@@ -22,7 +22,6 @@ public class LoadService {
      * @return The result of calling the load service
      */
     public LoadResult callLoadService(LoadRequest request) throws Exception {
-        System.out.println("Called callLoadService");
         Database database = new Database();
         LoadResult loadResult;
         Connection conn = null;

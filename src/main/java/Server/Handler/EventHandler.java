@@ -20,6 +20,8 @@ import java.net.HttpURLConnection;
 import java.sql.Connection;
 
 public class EventHandler implements HttpHandler {
+    private Database database;
+
     @Override
     public void handle(HttpExchange exchange) throws IOException {
         try {
@@ -30,7 +32,6 @@ public class EventHandler implements HttpHandler {
 
                 String token = "";
                 Headers reqHeaders = exchange.getRequestHeaders();
-                Database database;
                 Connection conn;
                 AuthTokenDAO authTokenDAO;
                 AuthToken authToken;
@@ -84,6 +85,7 @@ public class EventHandler implements HttpHandler {
         finally {
             try {
                 exchange.getResponseBody().close();
+                database.closeConnection(false);
             }
             catch (Exception e) {
                 e.printStackTrace();

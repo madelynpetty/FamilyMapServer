@@ -19,7 +19,7 @@ import java.net.HttpURLConnection;
 import java.sql.Connection;
 
 public class PersonHandler implements HttpHandler {
-
+    Database database;
     //for /person
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -31,7 +31,6 @@ public class PersonHandler implements HttpHandler {
 
                 String token = "";
                 Headers reqHeaders = exchange.getRequestHeaders();
-                Database database;
                 Connection conn;
                 AuthTokenDAO authTokenDAO;
                 AuthToken authToken;
@@ -86,6 +85,7 @@ public class PersonHandler implements HttpHandler {
         finally {
             try {
                 exchange.getResponseBody().close();
+                database.closeConnection(false);
             }
             catch (Exception e) {
                 e.printStackTrace();

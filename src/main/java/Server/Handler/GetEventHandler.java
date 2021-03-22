@@ -19,6 +19,7 @@ import java.rmi.server.ExportException;
 import java.sql.Connection;
 
 public class GetEventHandler implements HttpHandler {
+    private Database database;
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
@@ -31,7 +32,7 @@ public class GetEventHandler implements HttpHandler {
 
                 String token = "";
                 Headers reqHeaders = exchange.getRequestHeaders();
-                Database database;
+
                 Connection conn;
                 AuthTokenDAO authTokenDAO;
                 AuthToken authToken;
@@ -82,6 +83,7 @@ public class GetEventHandler implements HttpHandler {
         finally {
             try {
                 exchange.getResponseBody().close();
+                database.closeConnection(false);
             }
             catch (Exception e) {
                 e.printStackTrace();
