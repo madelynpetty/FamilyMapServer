@@ -48,10 +48,10 @@ public class GetEventHandler implements HttpHandler {
                     try {
                         authToken = authTokenDAO.find(token);
                     } catch (Exception e) {
-                        throw new Exception("Invalid Authorization token (you may not be logged in)");
+                        throw new Exception("Error: Invalid Authorization token (you may not be logged in)");
                     }
                 } else {
-                    throw new Exception("Authorization token missing.");
+                    throw new Exception("Error: Authorization token missing.");
                 }
 
                 Gson gson = new Gson();

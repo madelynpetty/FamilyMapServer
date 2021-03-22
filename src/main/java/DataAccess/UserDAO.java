@@ -90,7 +90,7 @@ public class UserDAO {
                 return user;
             }
             else {
-                throw new Exception("No matching username and password");
+                throw new Exception("Error: No matching username and password");
             }
         }
         catch (SQLException e) {

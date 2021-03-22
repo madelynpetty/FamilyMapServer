@@ -17,7 +17,7 @@ public class ClearService {
     /**
      * Returns the result of calling the Clear Service
      */
-    public ClearResult callClearService() {
+    public ClearResult callClearService() throws Exception {
         ClearResult clearResult;
         try {
             Connection conn = database.getConnection();
@@ -30,7 +30,7 @@ public class ClearService {
         catch (Exception e) {
             success = false;
             message = "Error: Could not clear the database";
-            clearResult = new ClearResult("Could not clear the database", false);
+            clearResult = new ClearResult("Error: Could not clear the database", false);
 //            throw e;
         }
         finally {
@@ -38,7 +38,7 @@ public class ClearService {
                 database.closeConnection(true);
             }
             catch (Exception e){
-                e.printStackTrace();
+                throw new Exception("Error: Could not close database");
             }
         }
 

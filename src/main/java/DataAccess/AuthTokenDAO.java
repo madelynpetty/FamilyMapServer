@@ -64,12 +64,5 @@ public class AuthTokenDAO {
         return null;
     }
 
-    /**
-     * Clears the person table in the database
-     * @return a boolean of whether or not the person table in the database was cleared
-     */
-//    public boolean clear() {
-//        return false;
-//    }
 
 }

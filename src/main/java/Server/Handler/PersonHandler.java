@@ -40,7 +40,7 @@ public class PersonHandler implements HttpHandler {
                     conn = database.openConnection();
                     authTokenDAO = new AuthTokenDAO(conn);
                 } catch (Exception e) {
-                    throw new Exception("cannot get a connection to the database.");
+                    throw new Exception("Error: cannot get a connection to the database.");
                 }
 
                 if (reqHeaders.containsKey("Authorization")) {
@@ -48,10 +48,10 @@ public class PersonHandler implements HttpHandler {
                     try {
                         authToken = authTokenDAO.find(token);
                     } catch (Exception e) {
-                        throw new Exception("Invalid Authorization token (you may not be logged in)");
+                        throw new Exception("Error: Invalid Authorization token (you may not be logged in)");
                     }
                 } else {
-                    throw new Exception("Authorization token missing.");
+                    throw new Exception("Error: Authorization token missing.");
                 }
 
                 Gson gson = new Gson();
@@ -65,7 +65,7 @@ public class PersonHandler implements HttpHandler {
                 outputStream.close();
             }
             else {
-                exchange.sendResponseHeaders(HttpURLConnection.HTTP_FORBIDDEN, 0);
+                exchange.sendResponseHeaders(HttpURLConnection.HTTP_BAD_REQUEST, 0);
             }
         }
         catch (Exception e) {

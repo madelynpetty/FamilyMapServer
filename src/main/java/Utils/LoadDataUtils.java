@@ -46,7 +46,7 @@ public class LoadDataUtils {
             }
         }
         catch (Exception e) {
-            throw new Exception("Could not populate user array");
+            throw new Exception("Error: Could not populate user array");
         }
     }
 
@@ -72,7 +72,7 @@ public class LoadDataUtils {
             }
         }
         catch (Exception e) {
-            throw new Exception("Could not populate person array");
+            throw new Exception("Error: Could not populate person array");
         }
     }
 
@@ -100,7 +100,7 @@ public class LoadDataUtils {
             }
         }
         catch (Exception e) {
-            throw new Exception("Could not populate event array");
+            throw new Exception("Error: Could not populate event array");
         }
     }
 }

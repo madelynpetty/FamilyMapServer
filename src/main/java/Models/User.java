@@ -150,21 +150,22 @@ public class User {
     public void setUsername(String username) {
         this.username = username;
     }
-//
-//    /**
-//     * Returns the user's unique authtoken
-//     * @return String
-//     */
-//    public String getAuthToken() {
-//        return authToken;
-//    }
-//
-//    /**
-//     * Sets user's unique authToken
-//     * @param authToken String
-//     */
-//    public void setAuthToken(String authToken) {
-//        this.authToken = authToken;
-//    }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == null)
+            return false;
+        if (o instanceof User) {
+            User oUser = (User) o;
+            return oUser.getUsername().equals(getUsername()) &&
+                    oUser.getPassword().equals(getPassword()) &&
+                    oUser.getEmail().equals(getEmail()) &&
+                    oUser.getFirstName().equals(getFirstName()) &&
+                    oUser.getLastName().equals(getLastName()) &&
+                    oUser.getGender().equals(getGender()) &&
+                    oUser.getPersonID().equals(getPersonID());
+        } else {
+            return false;
+        }
+    }
 }

@@ -32,7 +32,7 @@ public class PersonService {
             Person person = personDAO.find(personID);
 
             if (person == null) {
-                System.out.println("There is no matching person with personID " + personID + " in the database");
+                System.out.println("Error: There is no matching person with personID " + personID + " in the database");
                 personResult = null;
             }
             else {

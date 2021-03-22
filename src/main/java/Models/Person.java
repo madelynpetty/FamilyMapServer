@@ -193,8 +193,8 @@ public class Person {
             return oPerson.getPersonID().equals(getPersonID()) &&
                     oPerson.getAssociatedUsername().equals(getAssociatedUsername()) &&
                     oPerson.getFirstName().equals(getFirstName()) &&
-                    oPerson.getLastName() == (getLastName()) &&
-                    oPerson.getGender() == (getGender()) &&
+                    oPerson.getLastName().equals(getLastName()) &&
+                    oPerson.getGender().equals(getGender()) &&
                     oPerson.getFatherID().equals(getFatherID()) &&
                     oPerson.getMotherID().equals(getMotherID()) &&
                     oPerson.getSpouseID().equals(getSpouseID());

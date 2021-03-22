@@ -33,7 +33,7 @@ public class AuthTokenDAOTest {
             atDao = new AuthTokenDAO(conn);
         }
         catch (Exception e) {
-            throw new Exception("cannot set up AuthTokenTest");
+            throw new Exception("Error: cannot set up AuthTokenTest");
         }
     }
 
