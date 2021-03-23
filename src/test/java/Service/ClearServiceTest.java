@@ -1,7 +1,6 @@
 package Service;
 
-import DataAccess.Database;
-import DataAccess.UserDAO;
+import DataAccess.*;
 import Models.User;
 import Services.Result.ClearResult;
 import Services.Service.ClearService;
@@ -15,7 +14,6 @@ public class ClearServiceTest {
     @Test
     public void callClearServicePass() throws Exception {
         ClearResult clearResult = new ClearResult("Clear succeeded.", true);
-
         ClearService clearService = new ClearService();
         ClearResult compareTest = clearService.callClearService();
 

@@ -25,8 +25,8 @@ public class PersonDAO {
     public void insert(Person person) throws DataAccessException {
         //We can structure our string to be similar to a sql command, but if we insert question
         //marks we can change them later with help from the statement
-        String sql = "INSERT INTO person (personID, associatedUsername, firstName, lastName, gender, " +
-                "fatherID, motherID, spouseID) VALUES(?,?,?,?,?,?,?,?)";
+        String sql = "insert into person (personID, associatedUsername, firstName, lastName, gender, " +
+                "fatherID, motherID, spouseID) values(?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             //Using the statements built-in set(type) functions we can pick the question mark we want
             //to fill in and give it a proper value. The first argument corresponds to the first
@@ -56,7 +56,7 @@ public class PersonDAO {
     public Person find(String personID) throws DataAccessException {
         Person person;
         ResultSet rs = null;
-        String sql = "SELECT * FROM person WHERE personID = ?";
+        String sql = "select * from person where personID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, personID);
             rs = stmt.executeQuery();
@@ -88,7 +88,7 @@ public class PersonDAO {
     public Person findByUsername(String associatedUsername) throws DataAccessException {
         Person person;
         ResultSet rs = null;
-        String sql = "SELECT * FROM person WHERE associatedUsername = ?";
+        String sql = "select * from person where associatedUsername = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, associatedUsername);
             rs = stmt.executeQuery();
@@ -120,7 +120,7 @@ public class PersonDAO {
     public ArrayList<Person> findFamilyMembersWithUsername(String associatedUsername) throws DataAccessException {
         ArrayList<Person> persons = new ArrayList<>();
         ResultSet rs = null;
-        String sql = "SELECT * FROM person WHERE associatedUsername = ?";
+        String sql = "select * from person where associatedUsername = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, associatedUsername);
             rs = stmt.executeQuery();
@@ -154,8 +154,8 @@ public class PersonDAO {
      * @param person the person to be updated in the database
      */
     public void update(Person person) throws DataAccessException {
-        String sql = "UPDATE person SET associatedUsername = ?, firstName = ?, lastName = ?, gender = ?, " +
-                "fatherID = ?, motherID = ?, spouseID = ? WHERE personID = ?";
+        String sql = "update person set associatedUsername = ?, firstName = ?, lastName = ?, gender = ?, " +
+                "fatherID = ?, motherID = ?, spouseID = ? where personID = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, person.getAssociatedUsername());
@@ -175,7 +175,7 @@ public class PersonDAO {
     }
 
     public void clear(String username) throws DataAccessException, SQLException {
-        String sql = "DELETE FROM person where associatedUsername = ?";
+        String sql = "delete from person where associatedUsername = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
 

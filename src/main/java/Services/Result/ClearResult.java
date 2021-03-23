@@ -21,8 +21,7 @@ public class ClearResult {
             return false;
         if (o instanceof ClearResult) {
             ClearResult cr = (ClearResult) o;
-            return cr.message.equals(message) &&
-                    cr.success == (success);
+            return cr.success == (success);
         } else {
             return false;
         }

@@ -33,12 +33,8 @@ public class EventServiceTest {
                 48.2f, 32, "USA", "Seattle",
                 "Coding", 2021);
 
-        try {
-            database = new Database();
-            conn = database.getConnection();
-        } catch (DataAccessException e) {
-            throw new Exception("Could not connect to the database");
-        }
+        database = new Database();
+        conn = database.openConnection();
 
         DatabaseDAO databaseDAO = new DatabaseDAO(conn);
         databaseDAO.clearTables();
@@ -62,10 +58,10 @@ public class EventServiceTest {
         eventDAO.insert(mockEvent);
         eventDAO.insert(mockEvent1);
 
-        AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
-
         AuthToken authToken = new AuthToken("Gale", "12345678");
+        AuthTokenDAO authTokenDAO = new AuthTokenDAO(conn);
         authTokenDAO.insert(authToken);
+        assertEquals(authToken, authToken);
 
         EventListResult compareTest = eventService.callEventService(authToken.getAuthToken());
 
@@ -73,8 +69,8 @@ public class EventServiceTest {
     }
 
     @Test
-    public void callEventServiceFail() {
-
+    public void callEventServiceFail() throws Exception {
+        assertThrows(Exception.class, ()-> eventService.callEventService(null));
     }
 
     @Test
@@ -89,6 +85,6 @@ public class EventServiceTest {
 
     @Test
     public void getEventFail() {
-
+        assertThrows(Exception.class, ()-> eventService.getEvent(""));
     }
 }

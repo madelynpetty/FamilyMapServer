@@ -23,8 +23,8 @@ public class EventDAO {
     public void insert(Event event) throws DataAccessException {
         //We can structure our string to be similar to a sql command, but if we insert question
         //marks we can change them later with help from the statement
-        String sql = "INSERT INTO event (eventID, associatedUsername, personID, latitude, longitude, " +
-                "country, city, eventType, year) VALUES(?,?,?,?,?,?,?,?,?)";
+        String sql = "insert into event (eventID, associatedUsername, personID, latitude, longitude, " +
+                "country, city, eventType, year) values(?,?,?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             //Using the statements built-in set(type) functions we can pick the question mark we want
             //to fill in and give it a proper value. The first argument corresponds to the first
@@ -48,7 +48,7 @@ public class EventDAO {
     public Event find(String eventID) throws DataAccessException {
         Event event;
         ResultSet rs = null;
-        String sql = "SELECT * FROM event WHERE eventID = ?;";
+        String sql = "select * from event where eventID = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, eventID);
             rs = stmt.executeQuery();
@@ -79,7 +79,7 @@ public class EventDAO {
     public ArrayList<Event> findByUsername(String associatedUsername) throws DataAccessException {
         ArrayList<Event> events = new ArrayList<>();
         ResultSet rs = null;
-        String sql = "SELECT * FROM event WHERE associatedUsername = ?;";
+        String sql = "select * from event where associatedUsername = ?;";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, associatedUsername);
             rs = stmt.executeQuery();
@@ -110,7 +110,7 @@ public class EventDAO {
     }
 
     public void clear(String username) throws DataAccessException, SQLException {
-        String sql = "DELETE FROM event where associatedUsername = ?";
+        String sql = "delete from event where associatedUsername = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
 

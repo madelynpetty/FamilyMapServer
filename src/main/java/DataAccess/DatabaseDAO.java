@@ -51,7 +51,7 @@ public class DatabaseDAO {
         createTables();
     }
 
-    public void createTables() throws DataAccessException {
+    private void createTables() throws DataAccessException {
         String sql = "create table if not exists event (" +
                 "    eventID string not null unique," +
                 "    associatedUsername string not null," +

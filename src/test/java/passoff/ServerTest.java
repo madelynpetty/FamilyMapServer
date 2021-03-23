@@ -86,7 +86,7 @@ public class ServerTest {
         logger.info("Setting up " + testInfo.getDisplayName() + "...");
         proxy = new Proxy();
         /*
-            If a test fail on line 92 (the one following this comment),
+            If a test fail on line 91 (the one following this comment),
             make sure the host and port variables a couple dozen lines
             up are set to the correct parameters.
         */
@@ -315,7 +315,6 @@ public class ServerTest {
         }
     }
 
-    //mp: here
     /**
      * Required API calls:
      * Register

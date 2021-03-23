@@ -1,5 +1,6 @@
 package Service;
 
+import DataAccess.DataAccessException;
 import DataAccess.Database;
 import DataAccess.DatabaseDAO;
 import DataAccess.UserDAO;
@@ -7,6 +8,7 @@ import Models.User;
 import Services.Request.LoginRequest;
 import Services.Result.LoginResult;
 import Services.Service.LoginService;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -30,13 +32,17 @@ public class LoginServiceTest {
 
             DatabaseDAO databaseDAO = new DatabaseDAO(connection);
             databaseDAO.clearTables();
-            connection.commit();
 
             userDAO = new UserDAO(connection);
         }
         catch (Exception e) {
             throw new Exception("could not connect to database");
         }
+    }
+
+    @AfterEach
+    public void tearDown() throws DataAccessException {
+        database.closeConnection(false);
     }
 
     @Test

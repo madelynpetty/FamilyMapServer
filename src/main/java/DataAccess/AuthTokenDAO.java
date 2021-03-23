@@ -23,7 +23,7 @@ public class AuthTokenDAO {
     public void insert(AuthToken authToken) throws DataAccessException {
         //We can structure our string to be similar to a sql command, but if we insert question
         //marks we can change them later with help from the statement
-        String sql = "INSERT INTO authToken (username, token) VALUES(?,?)";
+        String sql = "insert into authToken (username, token) values(?,?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             //Using the statements built-in set(type) functions we can pick the question mark we want
@@ -41,7 +41,7 @@ public class AuthTokenDAO {
     public AuthToken find(String token) throws DataAccessException {
         AuthToken authToken;
         ResultSet rs = null;
-        String sql = "SELECT * FROM authToken WHERE token = ?";
+        String sql = "select * from authToken where token = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, token);
             rs = stmt.executeQuery();

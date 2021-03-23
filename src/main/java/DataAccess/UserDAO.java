@@ -20,14 +20,9 @@ public class UserDAO {
      * @return a boolean of whether or not the event was added to the user table in the database
      */
     public void insert(User user) throws DataAccessException {
-        //We can structure our string to be similar to a sql command, but if we insert question
-        //marks we can change them later with help from the statement
-        String sql = "INSERT INTO user (username, password, email, firstName, lastName, " +
-                "gender, personID) VALUES(?,?,?,?,?,?,?)";
+        String sql = "insert into user (username, password, email, firstName, lastName, " +
+                "gender, personID) values(?,?,?,?,?,?,?)";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            //Using the statements built-in set(type) functions we can pick the question mark we want
-            //to fill in and give it a proper value. The first argument corresponds to the first
-            //question mark found in our sql String
             stmt.setString(1, user.getUsername());
             stmt.setString(2, user.getPassword());
             stmt.setString(3, user.getEmail());
@@ -46,7 +41,7 @@ public class UserDAO {
     public User find(String username) throws DataAccessException {
         User user;
         ResultSet rs = null;
-        String sql = "SELECT * FROM user WHERE username = ?";
+        String sql = "select * from user where username = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             rs = stmt.executeQuery();
@@ -77,7 +72,7 @@ public class UserDAO {
         //sql query to see if anything matches username and password
         User user;
         ResultSet rs = null;
-        String sql = "SELECT * FROM user WHERE username = ? AND password = ?";
+        String sql = "select * from user where username = ? and password = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, username);
             stmt.setString(2, password);
