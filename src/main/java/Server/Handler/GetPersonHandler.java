@@ -60,6 +60,9 @@ public class GetPersonHandler implements HttpHandler {
 
                 Gson gson = new Gson();
                 PersonResult personResult = personService.findPersonWithMatchingPersonID(personID);
+                if (!personResult.getAssociatedUsername().equalsIgnoreCase(authToken.getUsername())) {
+                    throw new Exception("Error: You cannot look up a person you are not related to");
+                }
 
                 String response = gson.toJson(personResult);
                 OutputStream outputStream = exchange.getResponseBody();

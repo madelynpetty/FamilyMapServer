@@ -39,6 +39,10 @@ public class PersonResult {
         this.success = success;
     }
 
+    public String getAssociatedUsername() {
+        return associatedUsername;
+    }
+
 
     @Override
     public boolean equals(Object o) {

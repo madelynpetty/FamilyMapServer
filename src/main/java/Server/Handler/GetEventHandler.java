@@ -61,6 +61,9 @@ public class GetEventHandler implements HttpHandler {
 
                 Gson gson = new Gson();
                 EventResult eventResult = eventService.getEvent(eventID);
+                if(!eventResult.getAssociatedUsername().equalsIgnoreCase(authToken.getUsername())) {
+                    throw new Exception("Error: You cannot access events from people that you are not related to");
+                }
 
                 String response = gson.toJson(eventResult);
                 OutputStream outputStream = exchange.getResponseBody();

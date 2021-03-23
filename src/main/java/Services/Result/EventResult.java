@@ -29,6 +29,10 @@ public class EventResult {
         success = true;
     }
 
+    public String getAssociatedUsername() {
+        return associatedUsername;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null)
